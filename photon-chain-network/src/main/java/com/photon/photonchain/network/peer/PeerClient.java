@@ -24,9 +24,9 @@ import java.util.List;
 import static com.photon.photonchain.network.utils.NetWorkUtil.bytesToInt;
 
 /**
- * @author Wu
+ * @author PTN
  * <p>
- * Created by SKINK on 2017/12/26.
+ * Created by PTN on 2017/12/26.
  */
 @Component
 public class PeerClient {
@@ -52,17 +52,16 @@ public class PeerClient {
         EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
         bootstrap.group(eventLoopGroup)
                 .channel(NioSocketChannel.class)
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 2000)
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
                 .option(ChannelOption.SO_KEEPALIVE, true)
+                .option(ChannelOption.TCP_NODELAY, true)
                 .handler(peerClientInitializer);
         try {
             ChannelFuture channelFuture = bootstrap.connect(host, port).sync();
             channelFuture.channel().closeFuture().await();
         } catch (Exception e) {
-            logger.error("peer[{}]exception.", host);
         } finally {
             eventLoopGroup.shutdownGracefully();
-            logger.info("peer[{}close connection.", host);
         }
     }
 
@@ -78,7 +77,7 @@ public class PeerClient {
     }
 
     public void init() {
-        List<String> nodeAddressList = initializationManager.getNodeList();
+        List<String> nodeAddressList = initializationManager.getCloneNodeList();
         nodeAddressList.forEach(nodeAddress -> {
             poolsConnect(bytesToInt(Hex.decode(nodeAddress)));
         });

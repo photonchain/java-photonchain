@@ -15,7 +15,6 @@ public class Base64 {
         return (new BASE64Decoder()).decodeBuffer(key);
     }
 
-
     public static String encryptBASE64(byte[] key) throws Exception {
         return (new BASE64Encoder()).encodeBuffer(key);
     }

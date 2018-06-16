@@ -2,6 +2,12 @@ package com.photon.photonchain.storage.constants;
 
 import java.math.BigInteger;
 
+/**
+ * @Author:PTN
+ * @Description:
+ * @Date:15:13 2018/1/4
+ * @Modified by:
+ */
 public class Constants {
     public static final int MAGIC_NO = 0x133c9c4;
     public static final BigInteger CUMULATIVE_DIFFICULTY = BigInteger.ZERO;
@@ -9,12 +15,13 @@ public class Constants {
     public static final String SYNC_BLOCK_HEIGHT = "SYNC_BLOCK_HEIGHT";
     public static final String SYNC_BLOCK_LIST = "SYNC_BLOCK_LIST";
     public static final String SYNC_TRANSACTION_LIST = "SYNC_TRANSACTION_LIST";
-    public static final String SYNC_TRANSACTION_ID = "SYNC_TRANSACTION_ID";
     public static final String TOTAL_INCOME = "TOTAL_INCOME";
     public static final String TOTAL_EXPENDITURE = "TOTAL_EXPENDITURE";
     public static final String TOTAL_EFFECTIVE_INCOME = "TOTAL_EFFECTIVE_INCOME";
+    public static final String BALANCE = "BALANCE";
     public static final String SYNC_MAC_ADDRESS = "SYNC_MAC_ADDRESS";
-    public static final int BLOCK_INTERVAL = 0x2710;
+    public static final int BLOCK_INTERVAL = 0x1f40;
+    public static final int OVERTIME_INTERVAL = 0x4e20;
     public static final long MININUMUNIT = 1000000;
     public static final String ADDRESS_PREFIX = "px";
     public static final String MINI_UNIT = "MINI_UNIT";
@@ -31,5 +38,8 @@ public class Constants {
     public static final Long MAX_PTN_AMOUNT = 5000000000L;
     public static final Long MAX_PTN_AMOUT_UNIT = MAX_PTN_AMOUNT * MININUMUNIT;
     public static final int FORGABLE_NODES = 2;
-    public static final int SYNC_SIZE=0x7d0;
+    public static final int SYNC_SIZE = 0x7d0;
+    public static final String CAPITAL_ADDRESS = "04353769aeb7492eaeed79153c05f917d71cd0320dc9ee1d1a70049341cf65ec189c0064507d91774301d43530f045422f32aac787ced24e2650d48ad42f5508de";
+
+    public static final long CONTRACT_FUNDS_MIN = 100 * MININUMUNIT;
 }

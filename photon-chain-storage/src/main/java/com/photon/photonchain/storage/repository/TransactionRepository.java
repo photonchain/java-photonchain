@@ -62,7 +62,7 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
     List<Transaction> findAll();
 
     @Modifying
-    @Query(value = "insert into TRANSACTION(TRANS_SIGNATURE,BLOCK_HEIGHT,LOCK_TIME,REMARK,TOKEN_NAME,TRANS_FROM,TRANS_TO,TRANS_TYPE,TRANSACTION_HEAD) values(:#{#transaction.transSignature},:#{#transaction.blockHeight},:#{#transaction.lockTime},:#{#transaction.remark},:#{#transaction.tokenName},:#{#transaction.transFrom},:#{#transaction.transTo},:#{#transaction.transType},:#{#transaction.transactionHead})", nativeQuery = true)
+    @Query(value = "insert into TRANSACTION(TRANS_SIGNATURE,BLOCK_HEIGHT,LOCK_TIME,REMARK,TOKEN_NAME,TRANS_FROM,TRANS_TO,TRANS_TYPE,TRANSACTION_HEAD, CONTRACT_ADDRESS ,CONTRACT_BIN ,CONTRACT_STATE ,CONTRACT_TYPE ,EXCHENGE_TOKEN, TRANS_VALUE ,FEE) values(:#{#transaction.transSignature},:#{#transaction.blockHeight},:#{#transaction.lockTime},:#{#transaction.remark},:#{#transaction.tokenName},:#{#transaction.transFrom},:#{#transaction.transTo},:#{#transaction.transType},:#{#transaction.transactionHead},:#{#transaction.contractAddress},:#{#transaction.contractBin},:#{#transaction.contractState},:#{#transaction.contractType},:#{#transaction.exchengeToken},:#{#transaction.transValue},:#{#transaction.fee})", nativeQuery = true)
     void saveTransaction(@Param("transaction") Transaction transaction) throws Exception;
 
     @Query(value = "select count(transaction.transSignature) from Transaction transaction where transaction.tokenName=:#{#tokenName}  ")
@@ -81,9 +81,70 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
     int findBlockTransCount(long blockHeight);
 
     @Query(value = "select TRANS_SIGNATURE transSignature, BLOCK_HEIGHT blockHeight,LOCK_TIME lockTime, REMARK remark,TOKEN_NAME tokenName,TRANS_FROM transFrom,TRANS_TO transTo,TRANS_TYPE transType,TRANSACTION_HEAD transactionHead from Transaction where token_name =:#{#tokenName} AND (trans_from=:#{#account} or trans_to=:#{#account}) limit :#{#start},:#{#end}", nativeQuery = true)
-    List<Transaction> findAllByAccountAndTokenNameNative(@Param("tokenName") String tokenName, @Param("account") String account,@Param("start") long start,@Param("end") long end);
+    List<Transaction> findAllByAccountAndTokenNameNative(@Param("tokenName") String tokenName, @Param("account") String account, @Param("start") long start, @Param("end") long end);
 
     @Query(value = "select * from Transaction limit :#{#start},:#{#size}", nativeQuery = true)
-    List<Transaction> findTransactionInterval(@Param("start") long start,@Param("size") long size);
+    List<Transaction> findTransactionInterval(@Param("start") long start, @Param("size") long size);
+
+    @Modifying
+    @Query(value = "DELETE FROM TRANSACTION ", nativeQuery = true)
+    void truncate();
+
+    @Query(value = "select transaction from Transaction transaction where transaction.transSignature=:#{#signature}")
+    Transaction findByTransSignature(@Param("signature") byte[] signature);
+
+
+
+    @Query(value = "select transaction from Transaction transaction where transaction.contractAddress=:#{#contractAddress} and transaction.transType=:#{#transType}")
+    Transaction findByContract(@Param("contractAddress") String contractAddress, @Param("transType") int transType);
+
+    @Query(value = "select transaction from Transaction transaction where transaction.contractAddress=:#{#contractAddress} and transaction.contractState=:#{#state} and transaction.transType=:#{#transType}")
+    Transaction findByContractAddress(@Param("contractAddress") String contractAddress, @Param("state") Integer state, @Param("transType") Integer transType);
+
+
+    @Query(value = "select transaction from Transaction transaction where transaction.transTo=:#{#transTo} and transaction.transType=:#{#transType} and transaction.contractAddress=:#{#contractAddress}")
+    Transaction findByTransFromAndType(@Param("transTo") String transTo, @Param("transType") Integer transType, @Param("contractAddress") String contractAddress);
+
+    @Query(value = "SELECT * FROM TRANSACTION  where TRANS_TYPE =:#{#transType} and TRANS_TO =:#{#transTo}", nativeQuery = true)
+    List<Transaction> findByTransTypeAndTransToNative(@Param("transType") long transType, @Param("transTo") String transTo);
+
+
+    @Modifying
+    @Query(value = "update Transaction trans set trans.contractState=:#{#transaction.contractState} where trans.contractAddress =:#{#transaction.contractAddress} and trans.transType=:#{#transaction.transType}")
+    void updateTransactionState(@Param("transaction") Transaction transaction);
+
+    @Modifying
+    @Query(value = "update Transaction trans set trans.contractState=:#{#transaction.contractState} where trans.contractAddress =:#{#transaction.contractAddress}")
+    void updateContranctState(@Param("transaction") Transaction transaction);
+
+
+    @Query(value = "select trans from Transaction trans where trans.transType=:#{#transType} and trans.transFrom in (:#{#transForms})")
+    List<Transaction> findByTransTypeAndTransForm(@Param("transType") Integer transType, @Param("transForms") List<String> transForms, Pageable pageable);
+
+    @Query(value = "select count(trans.transSignature) from Transaction trans where trans.transType=:#{#transType} and trans.transFrom in (:#{#transForms})")
+    int findByTransTypeAndTransFormCount(@Param("transType") Integer transType, @Param("transForms") List<String> transForms);
+
+
+    @Query(value = "select trans from Transaction trans where trans.transType=:#{#transType} and trans.transFrom not in (:#{#transForms}) and trans.contractState=:#{#contractState} and lower( trans.tokenName) like %:#{#tokenName}% and lower(trans.exchengeToken) like %:#{#exchengeToken}%")
+    List<Transaction> findByTransTypeAndNotTransForm(@Param("transType") Integer transType, @Param("transForms") List<String> transForms, Pageable pageable, @Param("contractState") int contractState, @Param("tokenName") String tokenName, @Param("exchengeToken") String exchengeToken);
+
+    @Query(value = "select count(trans.transSignature) from Transaction trans where trans.transType=:#{#transType} and trans.transFrom not in (:#{#transForms}) and trans.contractState=:#{#contractState} and trans.tokenName like %:#{#tokenName}% and trans.exchengeToken like %:#{#exchengeToken}%")
+    long findByTransTypeAndNotTransFormCount(@Param("transType") Integer transType, @Param("transForms") List<String> transForms, @Param("contractState") int contractState, @Param("tokenName") String tokenName, @Param("exchengeToken") String exchengeToken);
+
+
+    @Query(value = "SELECT count(TRANS_SIGNATURE) FROM TRANSACTION  where TRANS_TYPE =:#{#transType} and TRANS_FROM  =:#{#transFrom} and CONTRACT_ADDRESS  =:#{#contractAddress}", nativeQuery = true)
+    long findByTransTypeAndTransFromAndContractAddressNative(@Param("transType") long transType, @Param("transFrom") String transFrom, @Param("contractAddress") String contractAddress);
+
+    @Query(value = "SELECT ifnull(sum(trans_value)-sum(fee),0) FROM TRANSACTION where trans_type=2", nativeQuery = true)
+    long totalMining();
+
+    @Query(value = "SELECT IFNULL(sum(FEE),0)  FROM TRANSACTION where TRANS_FROM =:#{#transFrom} ", nativeQuery = true)
+    long findSumFee( @Param("transFrom") String transFrom);
+
+    @Query(value = "SELECT IFNULL(sum(TRANS_VALUE ),0)  FROM TRANSACTION where TRANS_FROM =:#{#transFrom} and lower(TOKEN_NAME) =lower(:#{#tokenName}) AND TRANS_TYPE !=1", nativeQuery = true)
+    long findExpenditureValue( @Param("transFrom") String transFrom, @Param("tokenName") String tokenName);
+
+    @Query(value = "SELECT IFNULL(sum(TRANS_VALUE),0)  FROM TRANSACTION where TRANS_TO =:#{#transTo} and lower(TOKEN_NAME) =lower(:#{#tokenName}) ", nativeQuery = true)
+    long findIncome( @Param("transTo") String transTo, @Param("tokenName") String tokenName);
 
 }

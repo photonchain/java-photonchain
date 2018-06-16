@@ -3,7 +3,12 @@ package com.photon.photonchain.storage.encryption;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * @Author:PTN
+ * @Description:
+ * @Date:17:21 2018/1/5
+ * @Modified by:
+ */
 public class HashMerkle {
     public static byte[] getHashMerkleRoot(List<byte[]> shalist) {
         byte[] shaone = null;

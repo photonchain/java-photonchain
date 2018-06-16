@@ -106,7 +106,7 @@ public class FileUtil {
                         BufferedReader reader = new BufferedReader(new FileReader(file2));
                         String tempString = null;
                         while ((tempString = reader.readLine()) != null) {
-                            account = tempString;
+                            account = account+tempString;
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -125,16 +125,12 @@ public class FileUtil {
     public static <T extends Serializable> T clone(T obj) {
         T cloneObj = null;
         try {
-
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ObjectOutputStream obs = new ObjectOutputStream(out);
             obs.writeObject(obj);
             obs.close();
-
-
             ByteArrayInputStream ios = new ByteArrayInputStream(out.toByteArray());
             ObjectInputStream ois = new ObjectInputStream(ios);
-
             cloneObj = (T) ois.readObject();
             ois.close();
         } catch (Exception e) {

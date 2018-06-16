@@ -32,8 +32,6 @@ public class SyncBlock {
     private SyncTokenManager syncTokenManager;
     @Autowired
     private UnconfirmedTranRepository unconfirmedTranRepository;
-    @Autowired
-    private AssetsHandle assetsHandle;
 
     public void init() {
         if (nioSocketChannelManager.getActiveNioSocketChannelCount() < BigInteger.ONE.longValue()) {
@@ -58,9 +56,6 @@ public class SyncBlock {
         InesvMessage.Message.Builder builder = MessageManager.createMessageBuilder(REQUEST, SYNC_BLOCK);
         long blockHeight = initializationManager.getBlockHeight();
         builder.setBlockHeight(blockHeight);
-        unconfirmedTranRepository.findAll().forEach(unconfirmedTran -> {
-            assetsHandle.delUnconfirmedTran(unconfirmedTran);
-        });
         unconfirmedTranRepository.deleteAll();
         nioSocketChannelManager.write(builder.build());
     }

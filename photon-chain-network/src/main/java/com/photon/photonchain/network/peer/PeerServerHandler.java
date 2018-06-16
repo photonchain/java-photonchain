@@ -2,8 +2,7 @@ package com.photon.photonchain.network.peer;
 
 
 import com.photon.photonchain.network.core.MessageProcessor;
-import com.photon.photonchain.network.ehcacheManager.InitializationManager;
-import com.photon.photonchain.network.ehcacheManager.NioSocketChannelManager;
+import com.photon.photonchain.network.ehcacheManager.*;
 import com.photon.photonchain.network.proto.InesvMessage;
 import com.photon.photonchain.network.proto.MessageManager;
 import com.photon.photonchain.network.utils.NetWorkUtil;
@@ -16,11 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.InetSocketAddress;
 import java.util.List;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.photon.photonchain.network.proto.EventTypeEnum.EventType.NODE_ADDRESS;
 import static com.photon.photonchain.network.proto.EventTypeEnum.EventType.PUSH_MAC;
@@ -28,8 +26,8 @@ import static com.photon.photonchain.network.proto.MessageTypeEnum.MessageType.R
 import static com.photon.photonchain.network.utils.NetWorkUtil.ipToHexString;
 
 /**
- * @Author wu
- * Created by SKINK on 2017/12/24.
+ * @Author PTN
+ * Created by PTN on 2017/12/24.
  */
 @ChannelHandler.Sharable
 @Component
@@ -38,13 +36,28 @@ public class PeerServerHandler extends SimpleChannelInboundHandler<InesvMessage.
     private static Logger logger = LoggerFactory.getLogger(PeerServerHandler.class);
 
     @Autowired
-    NioSocketChannelManager nioSocketChannelManager;
+    private MessageProcessor messageProcessor;
+
     @Autowired
-    MessageProcessor messageProcessor;
+    private NodeAddressRepository nodeAddressRepository;
+
     @Autowired
-    NodeAddressRepository nodeAddressRepository;
+    private InitializationManager initializationManager;
+
     @Autowired
-    InitializationManager initializationManager;
+    private Reconnect reconnect;
+
+    @Autowired
+    private NioSocketChannelManager nioSocketChannelManager;
+
+    @Autowired
+    private SyncBlockManager syncBlockManager;
+
+    @Autowired
+    private SyncUnconfirmedTranManager syncUnconfirmedTranManager;
+
+    @Autowired
+    private SyncTokenManager syncTokenManager;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, InesvMessage.Message msg) throws Exception {
@@ -65,7 +78,6 @@ public class PeerServerHandler extends SimpleChannelInboundHandler<InesvMessage.
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
         String address = ctx.channel().remoteAddress().toString();
-        logger.info(address + "Peer channel active");
         InesvMessage.Message.Builder macBuilder = MessageManager.createMessageBuilder(RESPONSE, PUSH_MAC);
         macBuilder.setMac(NetWorkUtil.getMACAddress());
         ctx.writeAndFlush(macBuilder.build());
@@ -86,5 +98,9 @@ public class PeerServerHandler extends SimpleChannelInboundHandler<InesvMessage.
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        if ((!syncBlockManager.isSyncBlock() && !syncUnconfirmedTranManager.isSyncTransaction() && !syncTokenManager.isSyncToken())) {
+            nioSocketChannelManager.removeInvalidChannel();
+            reconnect.init();
+        }
     }
 }

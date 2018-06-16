@@ -38,12 +38,12 @@ public class Initialization {
     public void init() {
         Block lastBlock = blockRepository.findLastOne(new PageRequest(0, 1, Sort.Direction.DESC, "blockHeight")).get(0);
         initializationManager.setLastBlock(lastBlock);
-        String accountPath = System.getProperty("user.dir") + File.separator + "account";
+        String accountPath = System.getProperty("user.home") + File.separator + "account";
         Map<String, String> accountList = FileUtil.traverseFolder(accountPath);
         initializationManager.setAccountList(accountList);
         List<String> nodeList = nodeAddressRepository.findAllHexIp();
         initializationManager.setNodeList(nodeList);
-        String accountTokenInfoPath = System.getProperty("user.dir") + File.separator + "account" + File.separator + "accountTokenInfo";
+        String accountTokenInfoPath = System.getProperty("user.home") + File.separator + "account" + File.separator + "accountTokenInfo";
         File file = new File(accountTokenInfoPath);
         try {
             if (!file.exists()) {
@@ -53,13 +53,15 @@ public class Initialization {
         }
         //Token cache
         Iterator tokens = tokenRepository.findAll().iterator();
-        while (tokens.hasNext()) {
+        while (tokens.hasNext()){
             Token token = (Token) tokens.next();
-            initializationManager.addTokenDecimal(token.getName(), token.getDecimals());
+            initializationManager.addTokenDecimal(token.getName(),token.getDecimals());
         }
         //set last transaction
         Transaction lastTransaction = transactionRepository.findTransactionOne(new PageRequest(0, 1, Sort.Direction.DESC, "blockHeight")).get(0);
         initializationManager.setLastTransaction(lastTransaction);
+        //set FoundryMachine state
+        initializationManager.setFoundryMachineState(false);
     }
 }
 

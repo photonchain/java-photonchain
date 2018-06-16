@@ -15,7 +15,12 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 
-
+/**
+ * @Author:PTN
+ * @Description:
+ * @Date:20:14 2018/1/5
+ * @Modified by:
+ */
 @Component
 public class RSAEncrypt {
 
@@ -67,7 +72,7 @@ public class RSAEncrypt {
 
     public byte[] encrypt(RSAPublicKey publicKey, byte[] plainTextData) throws Exception {
         if (publicKey == null) {
-            throw new Exception("pubkey is null, pls set");
+            throw new Exception("publickey is not null");
         }
         Cipher cipher = null;
         try {
@@ -75,24 +80,15 @@ public class RSAEncrypt {
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
             byte[] output = cipher.doFinal(plainTextData);
             return output;
-        } catch (NoSuchAlgorithmException e) {
-            throw new Exception("no algorithm");
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             return null;
-        } catch (InvalidKeyException e) {
-            throw new Exception("public invalid,pls check");
-        } catch (IllegalBlockSizeException e) {
-            throw new Exception("data length invalid");
-        } catch (BadPaddingException e) {
-            throw new Exception("data broken");
         }
     }
 
 
     public byte[] decrypt(RSAPrivateKey privateKey, byte[] cipherData) throws Exception {
         if (privateKey == null) {
-            throw new Exception("private key is null");
+            throw new Exception("privatekey is not null");
         }
         Cipher cipher = null;
         try {
@@ -100,17 +96,8 @@ public class RSAEncrypt {
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
             byte[] output = cipher.doFinal(cipherData);
             return output;
-        } catch (NoSuchAlgorithmException e) {
-            throw new Exception("no algorithm");
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             return null;
-        } catch (InvalidKeyException e) {
-            throw new Exception("private invalid,pls check");
-        } catch (IllegalBlockSizeException e) {
-            throw new Exception("data length invalid");
-        } catch (BadPaddingException e) {
-            throw new Exception("data broken");
         }
     }
 

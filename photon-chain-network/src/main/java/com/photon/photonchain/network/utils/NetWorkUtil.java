@@ -8,9 +8,9 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 /**
- * @author Wu
+ * @author PTN
  * <p>
- * Created by SKINK on 2017/12/26.
+ * Created by PTN on 2017/12/26.
  */
 public class NetWorkUtil {
 

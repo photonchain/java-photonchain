@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * @author Wu
+ * @author PTN
  *
- * Created by SKINK on 2017/12/26.
+ * Created by PTN on 2017/12/26.
  */
 @Component
 public class PeerClientExcutor extends ThreadPoolTaskExecutor {
@@ -16,14 +16,12 @@ public class PeerClientExcutor extends ThreadPoolTaskExecutor {
   private int corePoolSize = 10;
 
 
-  private int maxPoolSize = 30;
-
+  private int maxPoolSize = 300;
 
   private int queueCapacity = 8;
 
 
-  private int keepAlive = 60;
-
+  private int keepAlive = 600;
 
   public PeerClientExcutor() {
     super.setCorePoolSize(corePoolSize);

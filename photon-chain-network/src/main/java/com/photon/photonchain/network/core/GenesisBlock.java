@@ -3,11 +3,13 @@ package com.photon.photonchain.network.core;
 
 import com.photon.photonchain.storage.constants.Constants;
 import com.photon.photonchain.storage.encryption.ECKey;
+import com.photon.photonchain.storage.encryption.SHAEncrypt;
 import com.photon.photonchain.storage.entity.*;
-import com.photon.photonchain.storage.repository.AssetsRepository;
 import com.photon.photonchain.storage.repository.BlockRepository;
 import com.photon.photonchain.storage.repository.NodeAddressRepository;
 import com.photon.photonchain.storage.repository.TransactionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spongycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,37 +26,37 @@ import java.util.List;
  */
 @Component
 public class GenesisBlock {
+    final static Logger logger = LoggerFactory.getLogger(GenesisBlock.class);
+
+
     @Autowired
     private BlockRepository blockRepository;
     @Autowired
     private TransactionRepository transactionRepository;
     @Autowired
     private NodeAddressRepository nodeAddressRepository;
-    @Autowired
-    private AssetsRepository assetsRepository;
 
-    private static final byte[] GENESIS_PUBLIC_KEY = {4, -42, 45, 16, 106, -67, 104, -24, 99, 55, 64, 118, -29, -113, 14, -110, -72, -83, -23, 44, 121, 127, -94, 124, -21, -51, 57, -29, 124, 108, 80, -107, -5, 61, 100, 20, 10, -94, 103, 36, 95, 55, 49, -87, 109, -9, -14, -68, 89, 12, -26, 60, -16, -54, -92, -116, 94, -68, 98, -63, 33, -40, 17, 124, -82};
-    private static final byte[] ACCEPTER = {4, -100, -6, -56, -60, -117, -103, 17, 122, -34, 38, 107, 85, -95, -104, -46, -109, 110, -114, -40, -88, 41, 23, 109, 2, -94, 92, -49, 95, 53, -39, 126, 10, 35, 61, 70, -17, -23, 88, -123, 29, 41, 112, 105, 78, -72, 78, 78, -53, 72, -70, -94, 11, 21, -88, -4, 92, -63, -42, 8, -8, -115, -113, -96, -22};
-    private static final String HASH_MERKLE_ROOT = "33373837333764633562333766396531376130333034306666363933353361313632346534323939356136613266616431363561383066303430393532316466";
+    private static final byte[] GENESIS_PUBLIC_KEY = {4, -2, 14, 62, 39, 76, -61, -26, -94, 95, 31, -45, -85, -2, -71, 79, 47, -34, 92, -37, -86, 8, -70, -1, 77, -15, -66, 16, 8, 29, -113, -124, -90, -113, -22, -3, 28, -31, -37, -55, 48, -63, 69, 65, 82, 68, -33, -13, -116, -43, -91, 115, 64, -104, 115, 92, 97, 62, -1, -51, 127, 87, -33, -25, -33};
+    public static final byte[] ACCEPTER = {4, 63, -120, 63, -117, 112, 46, -55, 77, -52, 86, 34, 9, -102, -57, 49, 88, 34, 0, -60, -106, -15, 16, -97, -38, 57, -45, -38, 13, -128, -18, -79, 35, -91, 51, -98, 54, 9, 83, -66, -53, -35, -42, 10, -92, 75, -127, 50, 49, 80, 7, 27, -12, -118, 33, -24, -30, -107, -16, -100, -113, 60, 20, 72, 8};
     private static final String HASH_PREV_BLOCK = "aced000570";
-    private static final String TRANS_SIGNATURE = "7b2272223a35363932313135303939363035343130343733383639313736393231363631353137323938373336343134363638313931303631353238373938373331393339393333303839363031333036312c2273223a35373733393232373033383932393134303933343137363832333435373130333139383233363538363435333336313938353239303437333737333339313135323631323032383430393137382c2276223a32387d";
-    private static final String BLOCK_SIGNATURE = "7b2272223a37343432333133393532323134313837333530363335373437373533393035383538313136353833313936323539323634353439313133303535333433363730383335373135343436333638342c2273223a31393730333137333130373137323134343434323832313135363434343230303139393238343234373634393436343239343635363933353436343331323133353033363037393936353532302c2276223a32387d";
-    private static final long RECEIVE_QUANTITY = 3500000000L * Constants.MININUMUNIT;
+    public static final long RECEIVE_QUANTITY = 3500000000L * Constants.MININUMUNIT;
     public static final long GENESIS_TIME = 1514736000000L;
+    private static final String TRANS_SIGNATURE = "7b2272223a39333039303036373830343933313231333232313732313136303733333935393537353239363931343532333430393933333933333935343032353230383636303333323330373538303638352c2273223a32323037323533373330393436373539393635343930353734353639333839393134313339333933323437393430313333353330353733343239353236333135323839303237303530343932362c2276223a32387d";
+    private static final String HASH_MERKLE_ROOT = "62386137363564613738363836333134663631643433663561363338646231613331336333663764633030346264386532326537626563623464666561643635";
+    private static final String BLOCK_SIGNATURE = "7b2272223a36333339353935353436383536363032323933343839313835373333333131323630383436373530383037383235333437393834323535303739373031333034323931383235373138363437332c2273223a32373033303034383933393834363532363730373337373038313634313134343036343431373931393032393830343931393132383436323538303339353333383330333736313238363734332c2276223a32377d";
 
     @Transactional(rollbackFor = Exception.class)
     public void init() {
         if (blockRepository.count() == 0) {
-            TransactionHead transactionHead = new TransactionHead(Hex.toHexString(GENESIS_PUBLIC_KEY), Hex.toHexString(ACCEPTER), RECEIVE_QUANTITY, 0, 1514736000000L);
+            logger.info("MainAccount:" + ECKey.pubkeyToAddress(Hex.toHexString(ACCEPTER)));
+            TransactionHead transactionHead = new TransactionHead(Hex.toHexString(GENESIS_PUBLIC_KEY), Hex.toHexString(ACCEPTER), RECEIVE_QUANTITY, 0, GENESIS_TIME);
             BlockHead blockHead = new BlockHead(Constants.BLOCK_VERSION, GENESIS_TIME, Constants.CUMULATIVE_DIFFICULTY, Hex.decode(HASH_PREV_BLOCK), Hex.decode(HASH_MERKLE_ROOT));
-            //TODO
-            Transaction transaction = new Transaction(Hex.decode(TRANS_SIGNATURE), transactionHead, 0, 0, Hex.toHexString(GENESIS_PUBLIC_KEY), Hex.toHexString(ACCEPTER), "", Constants.PTN, 1);
+            Transaction transaction = new Transaction(Hex.decode(TRANS_SIGNATURE), transactionHead, 0, 0, Hex.toHexString(GENESIS_PUBLIC_KEY), Hex.toHexString(ACCEPTER), "", Constants.PTN, 1, RECEIVE_QUANTITY, 0);
             List<Transaction> transactionList = new ArrayList<>();
             transactionList.add(transaction);
             Block block = new Block(0, 441, RECEIVE_QUANTITY, 0, Hex.decode(BLOCK_SIGNATURE), GENESIS_PUBLIC_KEY, blockHead, transactionList);
-            Assets assets = new Assets(Hex.toHexString(ACCEPTER), Constants.PTN, RECEIVE_QUANTITY, 0, RECEIVE_QUANTITY, ECKey.pubkeyToAddress(Hex.toHexString(ACCEPTER)));
+            block.setBlockHash(Hex.toHexString(SHAEncrypt.SHA256(blockHead)));
             transactionRepository.save(transaction);
-            assetsRepository.save(assets);
             blockRepository.save(block);
         }
     }

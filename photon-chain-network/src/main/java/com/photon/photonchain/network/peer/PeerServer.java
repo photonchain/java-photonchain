@@ -16,8 +16,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
-/**@Author wu
- * Created by SKINK on 2017/12/24.
+/**
+ * @Author PTN
+ * Created by PTN on 2017/12/24.
  */
 @Component
 public class PeerServer {
@@ -36,28 +37,24 @@ public class PeerServer {
     public void init() {
 
         port = port != 0 ? port : 1905;
-        logger.info("Peer Server Init...");
-        logger.info("Peer Port:[{}]", port);
         peerServerExcutor.execute(() -> {
             ServerBootstrap bootstrap = new ServerBootstrap();
             EventLoopGroup bossLoopGroup = new NioEventLoopGroup();
             EventLoopGroup childLoopGroup = new NioEventLoopGroup();
             bootstrap.group(bossLoopGroup, childLoopGroup)
                     .channel(NioServerSocketChannel.class)
-                    .option(ChannelOption.SO_BACKLOG, 128)
+                    .option(ChannelOption.SO_BACKLOG, 1024)
                     .childHandler(peerServerInitializer)
-                    .childOption(ChannelOption.SO_KEEPALIVE, true);
+                    .childOption(ChannelOption.SO_KEEPALIVE, true)
+                    .childOption(ChannelOption.TCP_NODELAY, true);
             try {
                 ChannelFuture channelFuture = bootstrap.bind(port).sync();
-                logger.info("Peer Server Startd...");
                 channelFuture.channel().closeFuture().await();
             } catch (Exception e) {
                 e.printStackTrace();
-                logger.error("Peer Server Got a Exception.");
             } finally {
                 childLoopGroup.shutdownGracefully();
                 bossLoopGroup.shutdownGracefully();
-                logger.info("Peer Server ShutDown Success.");
             }
         });
     }

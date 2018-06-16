@@ -2,19 +2,18 @@ package com.photon.photonchain.storage.entity;
 
 import org.spongycastle.util.encoders.Hex;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * @Author:lqh
+ * @Author:PTN
  * @Description:
  * @Date:14:00 2018/01/09
  * @Modified by:
  */
 @Entity
+@Table(name = "Transaction", indexes = {@Index(name = "index_blockHeight", columnList = "blockHeight"), @Index(name = "idx_transFrom", columnList = "transFrom"), @Index(name = "idx_transTo", columnList = "transTo"), @Index(name = "idx_tokenName", columnList = "tokenName")})
 public class Transaction implements Serializable {
     @Id
     private byte[] transSignature;
@@ -33,12 +32,41 @@ public class Transaction implements Serializable {
 
     private String tokenName;
 
-    private int transType;//0 trans 1 new token 2 miner
+    private int transType;
+
+    @Column(columnDefinition = "TEXT")
+    private String contractBin;
+
+    private String contractAddress;
+
+    private int contractType;
+
+    private int contractState;
+
+    private String attrOne;
+
+    private String attrTwo;
+
+    private String attrThree;
+
+    private String exchengeToken;
+
+    private long transValue;
+
+    private long fee;
+
+    public String getExchengeToken() {
+        return exchengeToken;
+    }
+
+    public void setExchengeToken(String exchengeToken) {
+        this.exchengeToken = exchengeToken;
+    }
 
     public Transaction() {
     }
 
-    public Transaction(byte[] transSignature, TransactionHead transactionHead, long blockHeight, long lockTime, String transFrom, String transTo, String remark, String tokenName, int transType) {
+    public Transaction(byte[] transSignature, TransactionHead transactionHead, long blockHeight, long lockTime, String transFrom, String transTo, String remark, String tokenName, int transType, long transValue, long fee) {
         this.transSignature = transSignature;
         this.transactionHead = transactionHead;
         this.blockHeight = blockHeight;
@@ -48,6 +76,33 @@ public class Transaction implements Serializable {
         this.remark = remark;
         this.tokenName = tokenName;
         this.transType = transType;
+        this.contractAddress = "";
+        this.contractBin = "";
+        this.contractType = 0;
+        this.contractState = -1;
+        this.transValue = transValue;
+        this.fee = fee;
+    }
+
+    public Transaction(byte[] transSignature, TransactionHead transactionHead, long blockHeight
+            , long lockTime, String transFrom, String transTo, String remark, String tokenName, int transType
+            , String contractAddress, String contractBin, int contractType, int contractState, String exchengeToken, long transValue, long fee) {
+        this.transSignature = transSignature;
+        this.transactionHead = transactionHead;
+        this.blockHeight = blockHeight;
+        this.lockTime = lockTime;
+        this.transFrom = transFrom;
+        this.transTo = transTo;
+        this.remark = remark;
+        this.tokenName = tokenName;
+        this.transType = transType;
+        this.contractAddress = contractAddress;
+        this.contractBin = contractBin;
+        this.contractType = contractType;
+        this.contractState = contractState;
+        this.exchengeToken = exchengeToken;
+        this.transValue = transValue;
+        this.fee = fee;
     }
 
     public byte[] getTransSignature() {
@@ -122,6 +177,78 @@ public class Transaction implements Serializable {
         this.transType = transType;
     }
 
+    public String getContractBin() {
+        return contractBin;
+    }
+
+    public void setContractBin(String contractBin) {
+        this.contractBin = contractBin;
+    }
+
+    public String getContractAddress() {
+        return contractAddress;
+    }
+
+    public void setContractAddress(String contractAddress) {
+        this.contractAddress = contractAddress;
+    }
+
+    public int getContractType() {
+        return contractType;
+    }
+
+    public void setContractType(int contractType) {
+        this.contractType = contractType;
+    }
+
+    public int getContractState() {
+        return contractState;
+    }
+
+    public void setContractState(int contractState) {
+        this.contractState = contractState;
+    }
+
+    public String getAttrOne() {
+        return attrOne;
+    }
+
+    public void setAttrOne(String attrOne) {
+        this.attrOne = attrOne;
+    }
+
+    public String getAttrTwo() {
+        return attrTwo;
+    }
+
+    public void setAttrTwo(String attrTwo) {
+        this.attrTwo = attrTwo;
+    }
+
+    public String getAttrThree() {
+        return attrThree;
+    }
+
+    public void setAttrThree(String attrThree) {
+        this.attrThree = attrThree;
+    }
+
+    public long getTransValue() {
+        return transValue;
+    }
+
+    public long getFee() {
+        return fee;
+    }
+
+    public void setTransValue(long transValue) {
+        this.transValue = transValue;
+    }
+
+    public void setFee(long fee) {
+        this.fee = fee;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -167,6 +294,9 @@ public class Transaction implements Serializable {
                 ", remark='" + remark + '\'' +
                 ", tokenName='" + tokenName + '\'' +
                 ", transType=" + transType +
+                ", contractAddress=" + contractAddress +
+                ", contractBin=" + contractBin +
+                ", contractType=" + contractType +
                 '}';
     }
 
@@ -180,10 +310,13 @@ public class Transaction implements Serializable {
                 ", fee=" + transactionHead.getFee() +
                 ", timeStamp=" + transactionHead.getTimeStamp() +
                 ", transType=" + transType +
+                ", contractAddress=" + contractAddress +
+                ", contractBin=" + contractBin +
+                ", contractType=" + contractType +
                 '}';
     }
 
     public UnconfirmedTran getUnconfirmedTran() {
-        return new UnconfirmedTran(transFrom, transTo, remark, tokenName, transactionHead.getTransValue(), transactionHead.getFee(), transactionHead.getTimeStamp(), transType);
+        return new UnconfirmedTran(transFrom, transTo, remark, tokenName, transactionHead.getTransValue(), transactionHead.getFee(), transactionHead.getTimeStamp(), transType, contractAddress, contractBin, contractType, contractState, exchengeToken);
     }
 }

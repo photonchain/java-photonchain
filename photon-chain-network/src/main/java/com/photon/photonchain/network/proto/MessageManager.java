@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Author:PTN
+ * @Author:Lin
  * @Description:
  * @Date:17:18 2018/1/3
  * @Modified by:
@@ -33,6 +33,7 @@ public class MessageManager {
                 builder.addBlockTransactions(createTransactionMessage(block.getBlockTransactions().get(i)));
             }
         }
+        builder.setBlockHash(block.getBlockHash());
         return builder.build();
     }
 
@@ -50,6 +51,7 @@ public class MessageManager {
             transactionList.add(parseTransactionMessage(transactionMessage));
         });
         block.setBlockTransactions(transactionList);
+        block.setBlockHash(messageBlock.getBlockHash());
         return block;
     }
 
@@ -84,6 +86,13 @@ public class MessageManager {
         builder.setRemark(transaction.getRemark());
         builder.setTokenName(transaction.getTokenName());
         builder.setTransType(transaction.getTransType());
+        builder.setContractAddress(transaction.getContractAddress());
+        builder.setContractBin(transaction.getContractBin());
+        builder.setContractType(transaction.getContractType());
+        builder.setContractState(transaction.getContractState());
+        builder.setExchengeToken(transaction.getExchengeToken() != null ? transaction.getExchengeToken() : "");
+        builder.setTransValue(transaction.getTransValue());
+        builder.setFee(transaction.getFee());
         return builder.build();
     }
 
@@ -98,6 +107,13 @@ public class MessageManager {
         transaction.setRemark(messageTransaction.getRemark());
         transaction.setTokenName(messageTransaction.getTokenName());
         transaction.setTransType(messageTransaction.getTransType());
+        transaction.setContractAddress(messageTransaction.getContractAddress());
+        transaction.setContractBin(messageTransaction.getContractBin());
+        transaction.setContractState(messageTransaction.getContractState());
+        transaction.setContractType(messageTransaction.getContractType());
+        transaction.setExchengeToken(messageTransaction.getExchengeToken());
+        transaction.setTransValue(messageTransaction.getTransValue());
+        transaction.setFee(messageTransaction.getFee());
         return transaction;
     }
 
@@ -150,6 +166,12 @@ public class MessageManager {
         builder.setTimeStamp(unconfirmedTran.getTimeStamp());
         builder.setTransType(unconfirmedTran.getTransType());
         builder.setTransSignature(ByteString.copyFrom(unconfirmedTran.getTransSignature()));
+        builder.setContractAddress(unconfirmedTran.getContractAddress());
+        builder.setContractBin(unconfirmedTran.getContractBin());
+        builder.setContractState(unconfirmedTran.getContractState());
+        builder.setContractType(unconfirmedTran.getContractType());
+        builder.setUniqueAddress(unconfirmedTran.getUniqueAddress() != null ? unconfirmedTran.getUniqueAddress() : "");
+        builder.setExchengeToken(unconfirmedTran.getExchengeToken() == null ? "" : unconfirmedTran.getExchengeToken());
         return builder.build();
     }
 
@@ -164,6 +186,16 @@ public class MessageManager {
         unconfirmedTran.setTimeStamp(messageUnconfirmedTran.getTimeStamp());
         unconfirmedTran.setTransType(messageUnconfirmedTran.getTransType());
         unconfirmedTran.setTransSignature(messageUnconfirmedTran.getTransSignature().toByteArray());
+        unconfirmedTran.setContractAddress(messageUnconfirmedTran.getContractAddress());
+        unconfirmedTran.setContractBin(messageUnconfirmedTran.getContractBin());
+        unconfirmedTran.setContractState(messageUnconfirmedTran.getContractState());
+        unconfirmedTran.setContractType(messageUnconfirmedTran.getContractType());
+        if ("".equals(messageUnconfirmedTran.getUniqueAddress()) || messageUnconfirmedTran.getUniqueAddress() == null) {
+            unconfirmedTran.setUniqueAddress(null);
+        } else {
+            unconfirmedTran.setUniqueAddress(messageUnconfirmedTran.getUniqueAddress());
+        }
+        unconfirmedTran.setExchengeToken(messageUnconfirmedTran.getExchengeToken());
         return unconfirmedTran;
     }
 }

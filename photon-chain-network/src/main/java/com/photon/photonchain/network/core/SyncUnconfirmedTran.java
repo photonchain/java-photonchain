@@ -26,6 +26,7 @@ public class SyncUnconfirmedTran {
     public void init() {
         syncUnconfirmedTranManager.setSyncTransaction(true);
         syncUnconfirmedTranManager.setSyncCount(nioSocketChannelManager.getActiveNioSocketChannelCount());
+        syncUnconfirmedTranManager.setBlockHeight(0);
         InesvMessage.Message.Builder builder = MessageManager.createMessageBuilder(REQUEST, SYNC_TRANSACTION);
         nioSocketChannelManager.write(builder.build());
     }

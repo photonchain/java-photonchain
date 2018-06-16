@@ -1,0 +1,21 @@
+syntax = "proto2";
+option java_package = "com.photon.photonchain.network.proto";
+option java_outer_classname = "EventTypeEnum";
+
+enum EventType {
+    NEW_BLOCK = 0;
+    NEW_TRANSACTION = 1;
+    SYNC_BLOCK = 2;
+    SYNC_TRANSACTION = 3;
+    NODE_ADDRESS = 4;
+    SYNC_TOKEN = 5;
+    NEW_TOKEN = 6;
+    PUSH_MAC = 7;
+    ADD_PARTICIPANT = 8;
+    DEL_PARTICIPANT = 9;
+    SYNC_PARTICIPANT = 10;
+    SET_ZERO_PARTICIPANT=11;
+    NEW_CONTRACT = 12;
+    CANCEL_CONTRACT = 13;
+    IS_CANCEL = 14;
+}

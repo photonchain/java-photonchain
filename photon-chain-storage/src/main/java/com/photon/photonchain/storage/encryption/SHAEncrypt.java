@@ -13,7 +13,12 @@ import java.security.Security;
 
 import static java.util.Arrays.copyOfRange;
 
-
+/**
+ * @Author:PTN
+ * @Description:
+ * @Date:15:07 2018/1/4
+ * @Modified by:
+ */
 public class SHAEncrypt {
 
     private static final Provider CRYPTO_PROVIDER;

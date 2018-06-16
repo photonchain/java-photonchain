@@ -1,0 +1,21 @@
+syntax = "proto2";
+option java_package = "com.photon.photonchain.network.proto";
+option java_outer_classname = "UnconfirmedTranMessage";
+
+message UnconfirmedTran {
+    required string transFrom = 1;
+    required string transTo = 2;
+    required string remark = 3;
+    required string tokenName = 4;
+    required int64 transValue = 5;
+    required int64 fee = 6;
+    required int64 timeStamp = 7;
+    required int32 transType = 8;
+    required bytes transSignature = 9;
+    required string contractBin = 10;
+    required string contractAddress = 11;
+    required int32 contractType = 12;
+    required int32 contractState = 13;
+    required string uniqueAddress= 14;
+    required string exchengeToken= 15;
+}

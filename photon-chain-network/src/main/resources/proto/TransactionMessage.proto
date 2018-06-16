@@ -1,0 +1,23 @@
+syntax = "proto2";
+import "TransactionHeadMessage.proto";
+option java_package = "com.photon.photonchain.network.proto";
+option java_outer_classname = "TransactionMessage";
+
+message Transaction {
+    required int64 blockHeight = 1;
+    required int64 lockTime = 2;
+    required bytes transSignature = 3;
+    required TransactionHead transactionHead = 4;
+    required string transFrom = 5;
+    required string transTo = 6;
+    optional string remark = 7;
+    required string tokenName = 8;
+    required int32 transType = 9;
+    required string contractBin = 10;
+    required string contractAddress = 11;
+    required int32 contractType = 12;
+    required int32 contractState = 13;
+    required string exchengeToken = 14;
+    required int64 transValue = 15;
+    required int64 fee = 16;
+}

@@ -1,0 +1,8 @@
+syntax = "proto2";
+option java_package = "com.photon.photonchain.network.proto";
+option java_outer_classname = "ParticipantMessage";
+
+message Participant {
+    required string participant = 1;
+    required int32 count = 2;
+}

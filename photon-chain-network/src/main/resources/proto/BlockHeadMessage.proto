@@ -1,0 +1,11 @@
+syntax = "proto2";
+option java_package = "com.photon.photonchain.network.proto";
+option java_outer_classname = "BlockHeadMessage";
+
+message BlockHead {
+    required int32 version = 1;
+    required int64 timeStamp = 2;
+    required sfixed64 cumulativeDifficulty = 3;
+    required bytes hashPrevBlock = 4;
+    required bytes hashMerkleRoot = 5;
+}

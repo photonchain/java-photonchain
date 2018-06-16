@@ -51,6 +51,34 @@ public final class EventTypeEnum {
      * <code>PUSH_MAC = 7;</code>
      */
     PUSH_MAC(7),
+    /**
+     * <code>ADD_PARTICIPANT = 8;</code>
+     */
+    ADD_PARTICIPANT(8),
+    /**
+     * <code>DEL_PARTICIPANT = 9;</code>
+     */
+    DEL_PARTICIPANT(9),
+    /**
+     * <code>SYNC_PARTICIPANT = 10;</code>
+     */
+    SYNC_PARTICIPANT(10),
+    /**
+     * <code>SET_ZERO_PARTICIPANT = 11;</code>
+     */
+    SET_ZERO_PARTICIPANT(11),
+    /**
+     * <code>NEW_CONTRACT = 12;</code>
+     */
+    NEW_CONTRACT(12),
+    /**
+     * <code>CANCEL_CONTRACT = 13;</code>
+     */
+    CANCEL_CONTRACT(13),
+    /**
+     * <code>IS_CANCEL = 14;</code>
+     */
+    IS_CANCEL(14),
     ;
 
     /**
@@ -85,6 +113,34 @@ public final class EventTypeEnum {
      * <code>PUSH_MAC = 7;</code>
      */
     public static final int PUSH_MAC_VALUE = 7;
+    /**
+     * <code>ADD_PARTICIPANT = 8;</code>
+     */
+    public static final int ADD_PARTICIPANT_VALUE = 8;
+    /**
+     * <code>DEL_PARTICIPANT = 9;</code>
+     */
+    public static final int DEL_PARTICIPANT_VALUE = 9;
+    /**
+     * <code>SYNC_PARTICIPANT = 10;</code>
+     */
+    public static final int SYNC_PARTICIPANT_VALUE = 10;
+    /**
+     * <code>SET_ZERO_PARTICIPANT = 11;</code>
+     */
+    public static final int SET_ZERO_PARTICIPANT_VALUE = 11;
+    /**
+     * <code>NEW_CONTRACT = 12;</code>
+     */
+    public static final int NEW_CONTRACT_VALUE = 12;
+    /**
+     * <code>CANCEL_CONTRACT = 13;</code>
+     */
+    public static final int CANCEL_CONTRACT_VALUE = 13;
+    /**
+     * <code>IS_CANCEL = 14;</code>
+     */
+    public static final int IS_CANCEL_VALUE = 14;
 
 
     public final int getNumber() {
@@ -109,6 +165,13 @@ public final class EventTypeEnum {
         case 5: return SYNC_TOKEN;
         case 6: return NEW_TOKEN;
         case 7: return PUSH_MAC;
+        case 8: return ADD_PARTICIPANT;
+        case 9: return DEL_PARTICIPANT;
+        case 10: return SYNC_PARTICIPANT;
+        case 11: return SET_ZERO_PARTICIPANT;
+        case 12: return NEW_CONTRACT;
+        case 13: return CANCEL_CONTRACT;
+        case 14: return IS_CANCEL;
         default: return null;
       }
     }
@@ -167,12 +230,16 @@ public final class EventTypeEnum {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\023EventTypeEnum.proto*\224\001\n\tEventType\022\r\n\tN" +
+      "\n\023EventTypeEnum.proto*\244\002\n\tEventType\022\r\n\tN" +
       "EW_BLOCK\020\000\022\023\n\017NEW_TRANSACTION\020\001\022\016\n\nSYNC_" +
       "BLOCK\020\002\022\024\n\020SYNC_TRANSACTION\020\003\022\020\n\014NODE_AD" +
       "DRESS\020\004\022\016\n\nSYNC_TOKEN\020\005\022\r\n\tNEW_TOKEN\020\006\022\014" +
-      "\n\010PUSH_MAC\020\007B5\n$com.photon.photonchain.n" +
-      "etwork.protoB\rEventTypeEnum"
+      "\n\010PUSH_MAC\020\007\022\023\n\017ADD_PARTICIPANT\020\010\022\023\n\017DEL" +
+      "_PARTICIPANT\020\t\022\024\n\020SYNC_PARTICIPANT\020\n\022\030\n\024" +
+      "SET_ZERO_PARTICIPANT\020\013\022\020\n\014NEW_CONTRACT\020\014" +
+      "\022\023\n\017CANCEL_CONTRACT\020\r\022\r\n\tIS_CANCEL\020\016B5\n$" +
+      "com.photon.photonchain.network.protoB\rEv" +
+      "entTypeEnum"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

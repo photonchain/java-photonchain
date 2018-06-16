@@ -32,7 +32,6 @@ public class Block implements Serializable {
     @OneToMany
     private List<Transaction> blockTransactions;
 
-    @Transient
     private String blockHash;
 
     public Block() {

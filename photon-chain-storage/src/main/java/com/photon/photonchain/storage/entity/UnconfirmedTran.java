@@ -1,9 +1,7 @@
 package com.photon.photonchain.storage.entity;
 
-import org.spongycastle.util.encoders.Hex;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Arrays;
 
 /**
@@ -13,7 +11,8 @@ import java.util.Arrays;
  * @Modified by:
  */
 @Entity
-public class UnconfirmedTran {
+@Table(name = "UnconfirmedTran", indexes = {@Index(name = "index_transFrom", columnList = "transFrom"), @Index(name = "index_transTo", columnList = "transTo"), @Index(name = "index_tokenName", columnList = "tokenName")})
+public class UnconfirmedTran implements Comparable<UnconfirmedTran> {
     private String transFrom;
 
     private String transTo;
@@ -28,9 +27,37 @@ public class UnconfirmedTran {
 
     private long timeStamp;
 
-    private int transType;//0 trans 1 new token
+    private int transType;
     @Id
     private byte[] transSignature;
+
+    @Column(columnDefinition = "TEXT")
+    private String contractBin;
+
+    private String contractAddress;
+
+    private int contractType;
+
+    private int contractState;
+
+    private String attrOne;
+
+    private String attrTwo;
+
+    private String attrThree;
+
+    @Column(unique = true)
+    private String uniqueAddress;
+
+    private String exchengeToken;
+
+    public String getExchengeToken() {
+        return exchengeToken;
+    }
+
+    public void setExchengeToken(String exchengeToken) {
+        this.exchengeToken = exchengeToken;
+    }
 
     public UnconfirmedTran() {
     }
@@ -45,7 +72,48 @@ public class UnconfirmedTran {
         this.timeStamp = timeStamp;
         this.transType = transType;
         this.transSignature = transSignature;
+        this.contractAddress = "";
+        this.contractBin = "";
+        this.contractType = 0;
+        this.contractState = -1;
     }
+
+    public UnconfirmedTran(String transFrom, String transTo, String remark, String tokenName, long transValue, long fee, long timeStamp, int transType, String uniqueAddress, String contractAddress) {
+        this.transFrom = transFrom;
+        this.transTo = transTo;
+        this.remark = remark;
+        this.tokenName = tokenName;
+        this.transValue = transValue;
+        this.fee = fee;
+        this.timeStamp = timeStamp;
+        this.transType = transType;
+        this.transSignature = transSignature;
+        this.contractAddress = contractAddress;
+        this.contractBin = "";
+        this.contractType = 0;
+        this.contractState = -1;
+        this.uniqueAddress = uniqueAddress;
+    }
+
+
+    public UnconfirmedTran(String transFrom, String transTo, String remark, String tokenName
+            , long transValue, long fee, long timeStamp, int transType, String contractAddress, String contractBin, int contractType, int contractState, String exchengeToken) {
+        this.transFrom = transFrom;
+        this.transTo = transTo;
+        this.remark = remark;
+        this.tokenName = tokenName;
+        this.transValue = transValue;
+        this.fee = fee;
+        this.timeStamp = timeStamp;
+        this.transType = transType;
+        this.transSignature = transSignature;
+        this.contractAddress = contractAddress;
+        this.contractBin = contractBin;
+        this.contractType = contractType;
+        this.contractState = contractState;
+        this.exchengeToken = exchengeToken;
+    }
+
 
     public String getTransFrom() {
         return transFrom;
@@ -119,6 +187,70 @@ public class UnconfirmedTran {
         this.transSignature = transSignature;
     }
 
+    public String getContractBin() {
+        return contractBin;
+    }
+
+    public void setContractBin(String contractBin) {
+        this.contractBin = contractBin;
+    }
+
+    public String getContractAddress() {
+        return contractAddress;
+    }
+
+    public void setContractAddress(String contractAddress) {
+        this.contractAddress = contractAddress;
+    }
+
+    public int getContractType() {
+        return contractType;
+    }
+
+    public void setContractType(int contractType) {
+        this.contractType = contractType;
+    }
+
+    public int getContractState() {
+        return contractState;
+    }
+
+    public void setContractState(int contractState) {
+        this.contractState = contractState;
+    }
+
+    public String getAttrOne() {
+        return attrOne;
+    }
+
+    public void setAttrOne(String attrOne) {
+        this.attrOne = attrOne;
+    }
+
+    public String getAttrTwo() {
+        return attrTwo;
+    }
+
+    public void setAttrTwo(String attrTwo) {
+        this.attrTwo = attrTwo;
+    }
+
+    public String getAttrThree() {
+        return attrThree;
+    }
+
+    public void setAttrThree(String attrThree) {
+        this.attrThree = attrThree;
+    }
+
+    public String getUniqueAddress() {
+        return uniqueAddress;
+    }
+
+    public void setUniqueAddress(String uniqueAddress) {
+        this.uniqueAddress = uniqueAddress;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -162,6 +294,14 @@ public class UnconfirmedTran {
                 ", fee=" + fee +
                 ", timeStamp=" + timeStamp +
                 ", transType=" + transType +
+                ", contractAddress=" + contractAddress +
+                ", contractBin=" + contractBin +
+                ", contractType=" + contractType +
                 '}';
+    }
+
+    @Override
+    public int compareTo(UnconfirmedTran o) {
+        return (int) (this.fee - o.getFee());
     }
 }

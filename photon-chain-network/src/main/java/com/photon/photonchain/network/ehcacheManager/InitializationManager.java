@@ -1,14 +1,15 @@
 package com.photon.photonchain.network.ehcacheManager;
 
+import com.photon.photonchain.network.core.GenesisBlock;
 import com.photon.photonchain.network.utils.DeEnCode;
 import com.photon.photonchain.network.utils.FileUtil;
 import com.photon.photonchain.storage.constants.Constants;
 import com.photon.photonchain.storage.encryption.ECKey;
-import com.photon.photonchain.storage.entity.Assets;
+import com.photon.photonchain.storage.entity.AddressAndPubKey;
 import com.photon.photonchain.storage.entity.Block;
 import com.photon.photonchain.storage.entity.Transaction;
 import com.photon.photonchain.storage.entity.UnconfirmedTran;
-import com.photon.photonchain.storage.repository.AssetsRepository;
+import com.photon.photonchain.storage.repository.AddressAndPubkeyRepository;
 import com.photon.photonchain.storage.repository.TokenRepository;
 import com.photon.photonchain.storage.repository.TransactionRepository;
 import com.photon.photonchain.storage.repository.UnconfirmedTranRepository;
@@ -18,10 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author:PTN
@@ -45,7 +43,8 @@ public class InitializationManager {
     private UnconfirmedTranRepository unconfirmedTranRepository;
 
     @Autowired
-    private AssetsRepository assetsRepository;
+    private AddressAndPubkeyRepository addressAndPubkeyRepository;
+
 
     private static final String LAST_BLOCK = "LAST_BLOCK";
     private static final String BLOCK_HEIGHT = "BLOCK_HEIGHT";
@@ -57,6 +56,50 @@ public class InitializationManager {
     private static final String ACCOUNT_TOKEN = "ACCOUNT_TOKEN";
     private static final String TOKEN_DECIMAL = "TOKEN_DECIMAL";
     private static final String LAST_TRANSACTION = "LAST_TRANSACTION";
+    private static final String MACHINE_STATE = "MACHINE_STATE";
+    private static final String MAC_LIST = "MAC_LIST";
+    private static final String IS_CANCEL = "IS_CNACEL";
+
+
+    public void setContract(String contractAddress) {
+        EhCacheManager.put(initializationCache, contractAddress, contractAddress);
+    }
+
+    public String getContract(String contractAddress) {
+        try {
+            return EhCacheManager.getCacheValue(initializationCache, contractAddress, String.class);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public void removeContract(String contractAddress) {
+        try {
+            EhCacheManager.getCache(initializationCache.getName()).remove(contractAddress);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+        }
+    }
+
+    public void setCancelContract(String contractAddress) {
+        EhCacheManager.put(initializationCache, contractAddress + IS_CANCEL, contractAddress);
+    }
+
+    public String getCancelContract(String contractAddress) {
+        try {
+            return EhCacheManager.getCacheValue(initializationCache, contractAddress + IS_CANCEL, String.class);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public void removeCancelContract(String contractAddress) {
+        try {
+            EhCacheManager.getCache(initializationCache.getName()).remove(contractAddress + IS_CANCEL);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+        }
+    }
 
     public void setLastBlock(Block lastBlock) {
         EhCacheManager.put(initializationCache, LAST_BLOCK, lastBlock);
@@ -78,7 +121,6 @@ public class InitializationManager {
             Map<String, Map> tokenMap = accountMap.get(address);
             balanceMap = tokenMap.get(tokenName);
         } catch (Exception e) {
-            logger.info("获取账户资产异常--address:{},tokenName:{}", address, tokenName);
             balanceMap.put(Constants.TOTAL_EXPENDITURE, "0");
             balanceMap.put(Constants.TOTAL_EFFECTIVE_INCOME, "0");
             balanceMap.put(Constants.TOTAL_INCOME, "0");
@@ -212,32 +254,6 @@ public class InitializationManager {
         }
     }
 
-    /*    private void dealWithFromAccount(Map<String, Map> accountMap, String tokenName, String pubkey_from, String address_from, long value, long fee) {
-            if (accountMap.containsKey(address_from)) {
-                Map<String, Map> tokenMap = accountMap.get(address_from);
-                if (tokenMap.containsKey(tokenName)) {
-                    Map<String, Object> balanceMap = tokenMap.get(tokenName);
-                    balanceMap.put(Constants.TOTAL_EXPENDITURE, Long.parseLong(balanceMap.get(Constants.TOTAL_EXPENDITURE).toString()) + value + fee);
-                    tokenMap.put(tokenName, balanceMap);
-                } else {
-                    Map<String, Object> balanceMap = new HashMap<>();
-                    balanceMap.put(Constants.TOTAL_EXPENDITURE, value + fee);
-                    balanceMap.put(Constants.TOTAL_INCOME, 0L);
-                    balanceMap.put(Constants.TOTAL_EFFECTIVE_INCOME, 0L);
-                    tokenMap.put(tokenName, balanceMap);
-                }
-                accountMap.put(address_from, tokenMap);
-            } else {
-                Map<String, Object> balanceMap = new HashMap<>();
-                Map<String, Map> tokenMap = new HashMap<>();
-                balanceMap.put(Constants.TOTAL_EXPENDITURE, value + fee);
-                balanceMap.put(Constants.TOTAL_INCOME, 0L);
-                balanceMap.put(Constants.TOTAL_EFFECTIVE_INCOME, 0L);
-                balanceMap.put(Constants.PUBKEY, pubkey_from);
-                tokenMap.put(tokenName, balanceMap);
-                accountMap.put(address_from, tokenMap);
-            }
-        }*/
     private void dealWithFromAccount(Map<String, Map> accountMap, String tokenName, String pubkey_from, String address_from, long value, long fee, int transType) {
         if (transType == 2) {
             return;
@@ -321,30 +337,6 @@ public class InitializationManager {
         EhCacheManager.put(initializationCache, ACCOUNT, accountMap);
     }
 
-/*    public void updateEffective(Transaction transaction) {
-        Map<String, Map> accountMap = EhCacheManager.getCacheValue(initializationCache, ACCOUNT, Map.class);
-        String pubkey_to = transaction.getTransTo();
-        String address_to = ECKey.pubkeyToAddress(pubkey_to);
-        if (address_to.equals("")) {
-            return;
-        }
-        if (accountMap.containsKey(address_to)) {
-            Map<String, Map> tokenMap = accountMap.get(address_to);
-            if(tokenMap.containsKey(transaction.getTokenName())){
-                Map<String, Object> balanceMap = tokenMap.get(transaction.getTokenName());
-                if (transaction.getBlockHeight() != -1) {
-                    balanceMap.put(Constants.TOTAL_EFFECTIVE_INCOME, Long.parseLong(balanceMap.get(Constants.TOTAL_EFFECTIVE_INCOME).toString()) + transaction.getTransactionHead().getTransValue());
-                }
-                if (transaction.getTransType() == 2) {
-                    balanceMap.put(Constants.TOTAL_INCOME,Long.parseLong(Constants.TOTAL_INCOME.toString())+transaction.getTransactionHead().getTransValue());
-                }
-                tokenMap.put(transaction.getTokenName(),balanceMap);
-                accountMap.put(address_to,tokenMap);
-            }
-        }
-
-        EhCacheManager.put(initializationCache, ACCOUNT, accountMap);
-    }*/
 
     public void addAccount(Transaction transaction) {
         Map<String, Map> accountMap = EhCacheManager.getCacheValue(initializationCache, ACCOUNT, Map.class);
@@ -550,7 +542,6 @@ public class InitializationManager {
             pubkey = account.substring(account.indexOf(Constants.PUBKEY_FLAG) + Constants.PUBKEY_FLAG.length(), account.indexOf(Constants.PRIKEY_FLAG));
             prikey = account.substring(account.indexOf(Constants.PRIKEY_FLAG) + Constants.PRIKEY_FLAG.length());
         } catch (Exception e) {
-            System.out.println("getAccountListByAddress exception...");
         }
         resultMap.put(Constants.PWD, pwd);
         resultMap.put(Constants.PUBKEY, pubkey);
@@ -600,19 +591,15 @@ public class InitializationManager {
     }
 
     public long getTokenAssets(String tokenName, boolean ignoreUnverified) {
-        long tokenAssets = 0;
-        List<Assets> assetsList = assetsRepository.findAllByTokenName(tokenName);
-        for (Assets assets:assetsList) {
-         tokenAssets = tokenAssets + (assets.getTotalIncome()-assets.getTotalExpenditure());
-
+        if (tokenName.equals(Constants.PTN)) {
+            long totalMining = transactionRepository.totalMining();
+            return GenesisBlock.RECEIVE_QUANTITY + totalMining;
         }
-        if (tokenName.equals(Constants.PTN) && !ignoreUnverified) {
-            tokenAssets = tokenAssets + unconfirmedTranRepository.getUnconfirmedFee();
-        }
-        return tokenAssets;
+        return 0;
     }
 
     public void addTokenDecimal(String token, Integer decimal) {
+        token = token.toLowerCase();
         Map<String, Integer> tokenDecimalMap = null;
         try {
             tokenDecimalMap = EhCacheManager.getCacheValue(initializationCache, TOKEN_DECIMAL, Map.class);
@@ -624,15 +611,18 @@ public class InitializationManager {
     }
 
     public Integer getTokenDecimal(String token) {
-        Integer decimal = 6;
-        try {
-            Map<String, Integer> tokenDecimalMap = EhCacheManager.getCacheValue(initializationCache, TOKEN_DECIMAL, Map.class);
-            decimal = tokenDecimalMap.get(token);
-            return decimal == null ? 6 : decimal;
-        } catch (Exception e) {
-            return 6;
+        if (token != null) {
+            token = token.toLowerCase();
+            Integer decimal = 6;
+            try {
+                Map<String, Integer> tokenDecimalMap = EhCacheManager.getCacheValue(initializationCache, TOKEN_DECIMAL, Map.class);
+                decimal = tokenDecimalMap.get(token);
+                return decimal == null ? 6 : decimal;
+            } catch (Exception e) {
+                return 6;
+            }
         }
-
+        return 6;
     }
 
 
@@ -642,5 +632,49 @@ public class InitializationManager {
 
     public Transaction getLastTransaction() {
         return EhCacheManager.getCacheValue(initializationCache, LAST_TRANSACTION, Transaction.class);
+    }
+
+    public void setFoundryMachineState(boolean state) {
+        EhCacheManager.put(initializationCache, MACHINE_STATE, state);
+    }
+
+    public boolean getFoundryMachineState() {
+        try {
+            return EhCacheManager.getCacheValue(initializationCache, MACHINE_STATE, boolean.class);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void setMacList(List<String> macList) {
+        EhCacheManager.put(initializationCache, MAC_LIST, macList);
+    }
+
+    public List<String> getMacList() {
+        return EhCacheManager.getCacheValue(initializationCache, MAC_LIST, List.class);
+    }
+
+    public List<String> getCloneNodeList() {
+        return FileUtil.clone(EhCacheManager.getCacheValue(initializationCache, NODE_LIST, ArrayList.class));
+    }
+
+    public void saveAddressAndPubKey(Set<String> pubKeySet) {
+        //TODO:addressAndPubkey
+        long t1 = System.currentTimeMillis();
+        Set<AddressAndPubKey> addressAndPubKeySet = new HashSet<AddressAndPubKey>();
+        Set<String> dbPubkeySet = addressAndPubkeyRepository.findByPubkeys(pubKeySet);
+        pubKeySet.removeAll(dbPubkeySet);
+        Iterator iterator = pubKeySet.iterator();
+        while (iterator.hasNext()) {
+            String pubkey = (String) iterator.next();
+            String address = ECKey.pubkeyToAddress(pubkey);
+            AddressAndPubKey addressAndPubKey = new AddressAndPubKey(address, pubkey);
+            addressAndPubKeySet.add(addressAndPubKey);
+        }
+        if (!addressAndPubKeySet.isEmpty()) {
+            addressAndPubkeyRepository.save(addressAndPubKeySet);
+        }
+        long t2 = System.currentTimeMillis();
+        logger.info("【addressAndPubkey-time：{}】", (t2 - t1));
     }
 }

@@ -3,6 +3,9 @@ package com.photon.photonchain.network.peer;
 
 import com.photon.photonchain.network.core.MessageProcessor;
 import com.photon.photonchain.network.ehcacheManager.NioSocketChannelManager;
+import com.photon.photonchain.network.ehcacheManager.SyncBlockManager;
+import com.photon.photonchain.network.ehcacheManager.SyncTokenManager;
+import com.photon.photonchain.network.ehcacheManager.SyncUnconfirmedTranManager;
 import com.photon.photonchain.network.proto.InesvMessage;
 import com.photon.photonchain.network.proto.MessageManager;
 import com.photon.photonchain.network.utils.NetWorkUtil;
@@ -18,8 +21,8 @@ import static com.photon.photonchain.network.proto.EventTypeEnum.EventType.PUSH_
 import static com.photon.photonchain.network.proto.MessageTypeEnum.MessageType.RESPONSE;
 
 /**
- * @author Wu
- * Created by SKINK on 2017/12/24.
+ * @author PTN
+ * Created by PTN on 2017/12/24.
  */
 @ChannelHandler.Sharable
 @Component
@@ -28,10 +31,22 @@ public class PeerClientHandler extends SimpleChannelInboundHandler<InesvMessage.
     private static Logger logger = LoggerFactory.getLogger(PeerClientHandler.class);
 
     @Autowired
-    NioSocketChannelManager nioSocketChannelManager;
+    private NioSocketChannelManager nioSocketChannelManager;
 
     @Autowired
-    MessageProcessor messageProcessor;
+    private MessageProcessor messageProcessor;
+
+    @Autowired
+    private Reconnect reconnect;
+
+    @Autowired
+    private SyncBlockManager syncBlockManager;
+
+    @Autowired
+    private SyncUnconfirmedTranManager syncUnconfirmedTranManager;
+
+    @Autowired
+    private SyncTokenManager syncTokenManager;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, InesvMessage.Message msg) throws Exception {
@@ -50,7 +65,6 @@ public class PeerClientHandler extends SimpleChannelInboundHandler<InesvMessage.
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
-        logger.info(ctx.channel().remoteAddress().toString() + "Peer channel active");
         InesvMessage.Message.Builder builder = MessageManager.createMessageBuilder(RESPONSE, PUSH_MAC);
         builder.setMac(NetWorkUtil.getMACAddress());
         ctx.writeAndFlush(builder.build());
@@ -58,5 +72,9 @@ public class PeerClientHandler extends SimpleChannelInboundHandler<InesvMessage.
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        if ((!syncBlockManager.isSyncBlock() && !syncUnconfirmedTranManager.isSyncTransaction() && !syncTokenManager.isSyncToken())) {
+            nioSocketChannelManager.removeInvalidChannel();
+            reconnect.init();
+        }
     }
 }

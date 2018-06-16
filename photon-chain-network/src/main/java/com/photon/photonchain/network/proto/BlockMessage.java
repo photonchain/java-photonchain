@@ -108,6 +108,20 @@ public final class BlockMessage {
      */
     com.photon.photonchain.network.proto.TransactionMessage.TransactionOrBuilder getBlockTransactionsOrBuilder(
         int index);
+
+    /**
+     * <code>required string blockHash = 9;</code>
+     */
+    boolean hasBlockHash();
+    /**
+     * <code>required string blockHash = 9;</code>
+     */
+    java.lang.String getBlockHash();
+    /**
+     * <code>required string blockHash = 9;</code>
+     */
+    com.google.protobuf.ByteString
+        getBlockHashBytes();
   }
   /**
    * Protobuf type {@code Block}
@@ -129,6 +143,7 @@ public final class BlockMessage {
       blockSignature_ = com.google.protobuf.ByteString.EMPTY;
       foundryPublicKey_ = com.google.protobuf.ByteString.EMPTY;
       blockTransactions_ = java.util.Collections.emptyList();
+      blockHash_ = "";
     }
 
     @java.lang.Override
@@ -212,6 +227,12 @@ public final class BlockMessage {
               }
               blockTransactions_.add(
                   input.readMessage(com.photon.photonchain.network.proto.TransactionMessage.Transaction.PARSER, extensionRegistry));
+              break;
+            }
+            case 74: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000080;
+              blockHash_ = bs;
               break;
             }
           }
@@ -388,6 +409,48 @@ public final class BlockMessage {
       return blockTransactions_.get(index);
     }
 
+    public static final int BLOCKHASH_FIELD_NUMBER = 9;
+    private volatile java.lang.Object blockHash_;
+    /**
+     * <code>required string blockHash = 9;</code>
+     */
+    public boolean hasBlockHash() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>required string blockHash = 9;</code>
+     */
+    public java.lang.String getBlockHash() {
+      java.lang.Object ref = blockHash_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          blockHash_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string blockHash = 9;</code>
+     */
+    public com.google.protobuf.ByteString
+        getBlockHashBytes() {
+      java.lang.Object ref = blockHash_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        blockHash_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -419,6 +482,10 @@ public final class BlockMessage {
         return false;
       }
       if (!hasBlockHead()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasBlockHash()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -462,6 +529,9 @@ public final class BlockMessage {
       for (int i = 0; i < blockTransactions_.size(); i++) {
         output.writeMessage(8, blockTransactions_.get(i));
       }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, blockHash_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -501,6 +571,9 @@ public final class BlockMessage {
       for (int i = 0; i < blockTransactions_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(8, blockTransactions_.get(i));
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, blockHash_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -555,6 +628,11 @@ public final class BlockMessage {
       }
       result = result && getBlockTransactionsList()
           .equals(other.getBlockTransactionsList());
+      result = result && (hasBlockHash() == other.hasBlockHash());
+      if (hasBlockHash()) {
+        result = result && getBlockHash()
+            .equals(other.getBlockHash());
+      }
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -601,6 +679,10 @@ public final class BlockMessage {
       if (getBlockTransactionsCount() > 0) {
         hash = (37 * hash) + BLOCKTRANSACTIONS_FIELD_NUMBER;
         hash = (53 * hash) + getBlockTransactionsList().hashCode();
+      }
+      if (hasBlockHash()) {
+        hash = (37 * hash) + BLOCKHASH_FIELD_NUMBER;
+        hash = (53 * hash) + getBlockHash().hashCode();
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -757,6 +839,8 @@ public final class BlockMessage {
         } else {
           blockTransactionsBuilder_.clear();
         }
+        blockHash_ = "";
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
 
@@ -822,6 +906,10 @@ public final class BlockMessage {
         } else {
           result.blockTransactions_ = blockTransactionsBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.blockHash_ = blockHash_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -911,6 +999,11 @@ public final class BlockMessage {
             }
           }
         }
+        if (other.hasBlockHash()) {
+          bitField0_ |= 0x00000100;
+          blockHash_ = other.blockHash_;
+          onChanged();
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -936,6 +1029,9 @@ public final class BlockMessage {
           return false;
         }
         if (!hasBlockHead()) {
+          return false;
+        }
+        if (!hasBlockHash()) {
           return false;
         }
         if (!getBlockHead().isInitialized()) {
@@ -1523,6 +1619,82 @@ public final class BlockMessage {
         }
         return blockTransactionsBuilder_;
       }
+
+      private java.lang.Object blockHash_ = "";
+      /**
+       * <code>required string blockHash = 9;</code>
+       */
+      public boolean hasBlockHash() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>required string blockHash = 9;</code>
+       */
+      public java.lang.String getBlockHash() {
+        java.lang.Object ref = blockHash_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            blockHash_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string blockHash = 9;</code>
+       */
+      public com.google.protobuf.ByteString
+          getBlockHashBytes() {
+        java.lang.Object ref = blockHash_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          blockHash_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string blockHash = 9;</code>
+       */
+      public Builder setBlockHash(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
+        blockHash_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string blockHash = 9;</code>
+       */
+      public Builder clearBlockHash() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        blockHash_ = getDefaultInstance().getBlockHash();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string blockHash = 9;</code>
+       */
+      public Builder setBlockHashBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
+        blockHash_ = value;
+        onChanged();
+        return this;
+      }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
@@ -1587,14 +1759,14 @@ public final class BlockMessage {
   static {
     java.lang.String[] descriptorData = {
       "\n\022BlockMessage.proto\032\030TransactionMessage" +
-      ".proto\032\026BlockHeadMessage.proto\"\320\001\n\005Block" +
+      ".proto\032\026BlockHeadMessage.proto\"\343\001\n\005Block" +
       "\022\023\n\013blockHeight\030\001 \002(\003\022\021\n\tblockSize\030\002 \002(\003" +
       "\022\023\n\013totalAmount\030\003 \002(\003\022\020\n\010totalFee\030\004 \002(\003\022" +
       "\026\n\016blockSignature\030\005 \002(\014\022\030\n\020foundryPublic" +
       "Key\030\006 \002(\014\022\035\n\tblockHead\030\007 \002(\0132\n.BlockHead" +
       "\022\'\n\021blockTransactions\030\010 \003(\0132\014.Transactio" +
-      "nB4\n$com.photon.photonchain.network.prot" +
-      "oB\014BlockMessage"
+      "n\022\021\n\tblockHash\030\t \002(\tB4\n$com.photon.photo" +
+      "nchain.network.protoB\014BlockMessage"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1615,7 +1787,7 @@ public final class BlockMessage {
     internal_static_Block_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Block_descriptor,
-        new java.lang.String[] { "BlockHeight", "BlockSize", "TotalAmount", "TotalFee", "BlockSignature", "FoundryPublicKey", "BlockHead", "BlockTransactions", });
+        new java.lang.String[] { "BlockHeight", "BlockSize", "TotalAmount", "TotalFee", "BlockSignature", "FoundryPublicKey", "BlockHead", "BlockTransactions", "BlockHash", });
     com.photon.photonchain.network.proto.TransactionMessage.getDescriptor();
     com.photon.photonchain.network.proto.BlockHeadMessage.getDescriptor();
   }

@@ -1,0 +1,17 @@
+syntax = "proto2";
+import "TransactionMessage.proto";
+import "BlockHeadMessage.proto";
+option java_package = "com.photon.photonchain.network.proto";
+option java_outer_classname = "BlockMessage";
+
+message Block {
+    required int64 blockHeight = 1;
+    required int64 blockSize = 2;
+    required int64 totalAmount = 3;
+    required int64 totalFee = 4;
+    required bytes blockSignature = 5;
+    required bytes foundryPublicKey = 6;
+    required BlockHead blockHead = 7;
+    repeated Transaction blockTransactions = 8;
+    required string blockHash = 9;
+}

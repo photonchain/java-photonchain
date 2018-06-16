@@ -118,6 +118,80 @@ public final class UnconfirmedTranMessage {
      * <code>required bytes transSignature = 9;</code>
      */
     com.google.protobuf.ByteString getTransSignature();
+
+    /**
+     * <code>required string contractBin = 10;</code>
+     */
+    boolean hasContractBin();
+    /**
+     * <code>required string contractBin = 10;</code>
+     */
+    java.lang.String getContractBin();
+    /**
+     * <code>required string contractBin = 10;</code>
+     */
+    com.google.protobuf.ByteString
+        getContractBinBytes();
+
+    /**
+     * <code>required string contractAddress = 11;</code>
+     */
+    boolean hasContractAddress();
+    /**
+     * <code>required string contractAddress = 11;</code>
+     */
+    java.lang.String getContractAddress();
+    /**
+     * <code>required string contractAddress = 11;</code>
+     */
+    com.google.protobuf.ByteString
+        getContractAddressBytes();
+
+    /**
+     * <code>required int32 contractType = 12;</code>
+     */
+    boolean hasContractType();
+    /**
+     * <code>required int32 contractType = 12;</code>
+     */
+    int getContractType();
+
+    /**
+     * <code>required int32 contractState = 13;</code>
+     */
+    boolean hasContractState();
+    /**
+     * <code>required int32 contractState = 13;</code>
+     */
+    int getContractState();
+
+    /**
+     * <code>required string uniqueAddress = 14;</code>
+     */
+    boolean hasUniqueAddress();
+    /**
+     * <code>required string uniqueAddress = 14;</code>
+     */
+    java.lang.String getUniqueAddress();
+    /**
+     * <code>required string uniqueAddress = 14;</code>
+     */
+    com.google.protobuf.ByteString
+        getUniqueAddressBytes();
+
+    /**
+     * <code>required string exchengeToken = 15;</code>
+     */
+    boolean hasExchengeToken();
+    /**
+     * <code>required string exchengeToken = 15;</code>
+     */
+    java.lang.String getExchengeToken();
+    /**
+     * <code>required string exchengeToken = 15;</code>
+     */
+    com.google.protobuf.ByteString
+        getExchengeTokenBytes();
   }
   /**
    * Protobuf type {@code UnconfirmedTran}
@@ -141,6 +215,12 @@ public final class UnconfirmedTranMessage {
       timeStamp_ = 0L;
       transType_ = 0;
       transSignature_ = com.google.protobuf.ByteString.EMPTY;
+      contractBin_ = "";
+      contractAddress_ = "";
+      contractType_ = 0;
+      contractState_ = 0;
+      uniqueAddress_ = "";
+      exchengeToken_ = "";
     }
 
     @java.lang.Override
@@ -221,6 +301,40 @@ public final class UnconfirmedTranMessage {
             case 74: {
               bitField0_ |= 0x00000100;
               transSignature_ = input.readBytes();
+              break;
+            }
+            case 82: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000200;
+              contractBin_ = bs;
+              break;
+            }
+            case 90: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000400;
+              contractAddress_ = bs;
+              break;
+            }
+            case 96: {
+              bitField0_ |= 0x00000800;
+              contractType_ = input.readInt32();
+              break;
+            }
+            case 104: {
+              bitField0_ |= 0x00001000;
+              contractState_ = input.readInt32();
+              break;
+            }
+            case 114: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00002000;
+              uniqueAddress_ = bs;
+              break;
+            }
+            case 122: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00004000;
+              exchengeToken_ = bs;
               break;
             }
           }
@@ -491,6 +605,204 @@ public final class UnconfirmedTranMessage {
       return transSignature_;
     }
 
+    public static final int CONTRACTBIN_FIELD_NUMBER = 10;
+    private volatile java.lang.Object contractBin_;
+    /**
+     * <code>required string contractBin = 10;</code>
+     */
+    public boolean hasContractBin() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>required string contractBin = 10;</code>
+     */
+    public java.lang.String getContractBin() {
+      java.lang.Object ref = contractBin_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          contractBin_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string contractBin = 10;</code>
+     */
+    public com.google.protobuf.ByteString
+        getContractBinBytes() {
+      java.lang.Object ref = contractBin_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        contractBin_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int CONTRACTADDRESS_FIELD_NUMBER = 11;
+    private volatile java.lang.Object contractAddress_;
+    /**
+     * <code>required string contractAddress = 11;</code>
+     */
+    public boolean hasContractAddress() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    /**
+     * <code>required string contractAddress = 11;</code>
+     */
+    public java.lang.String getContractAddress() {
+      java.lang.Object ref = contractAddress_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          contractAddress_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string contractAddress = 11;</code>
+     */
+    public com.google.protobuf.ByteString
+        getContractAddressBytes() {
+      java.lang.Object ref = contractAddress_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        contractAddress_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int CONTRACTTYPE_FIELD_NUMBER = 12;
+    private int contractType_;
+    /**
+     * <code>required int32 contractType = 12;</code>
+     */
+    public boolean hasContractType() {
+      return ((bitField0_ & 0x00000800) == 0x00000800);
+    }
+    /**
+     * <code>required int32 contractType = 12;</code>
+     */
+    public int getContractType() {
+      return contractType_;
+    }
+
+    public static final int CONTRACTSTATE_FIELD_NUMBER = 13;
+    private int contractState_;
+    /**
+     * <code>required int32 contractState = 13;</code>
+     */
+    public boolean hasContractState() {
+      return ((bitField0_ & 0x00001000) == 0x00001000);
+    }
+    /**
+     * <code>required int32 contractState = 13;</code>
+     */
+    public int getContractState() {
+      return contractState_;
+    }
+
+    public static final int UNIQUEADDRESS_FIELD_NUMBER = 14;
+    private volatile java.lang.Object uniqueAddress_;
+    /**
+     * <code>required string uniqueAddress = 14;</code>
+     */
+    public boolean hasUniqueAddress() {
+      return ((bitField0_ & 0x00002000) == 0x00002000);
+    }
+    /**
+     * <code>required string uniqueAddress = 14;</code>
+     */
+    public java.lang.String getUniqueAddress() {
+      java.lang.Object ref = uniqueAddress_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          uniqueAddress_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string uniqueAddress = 14;</code>
+     */
+    public com.google.protobuf.ByteString
+        getUniqueAddressBytes() {
+      java.lang.Object ref = uniqueAddress_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        uniqueAddress_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int EXCHENGETOKEN_FIELD_NUMBER = 15;
+    private volatile java.lang.Object exchengeToken_;
+    /**
+     * <code>required string exchengeToken = 15;</code>
+     */
+    public boolean hasExchengeToken() {
+      return ((bitField0_ & 0x00004000) == 0x00004000);
+    }
+    /**
+     * <code>required string exchengeToken = 15;</code>
+     */
+    public java.lang.String getExchengeToken() {
+      java.lang.Object ref = exchengeToken_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          exchengeToken_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string exchengeToken = 15;</code>
+     */
+    public com.google.protobuf.ByteString
+        getExchengeTokenBytes() {
+      java.lang.Object ref = exchengeToken_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        exchengeToken_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -533,6 +845,30 @@ public final class UnconfirmedTranMessage {
         memoizedIsInitialized = 0;
         return false;
       }
+      if (!hasContractBin()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasContractAddress()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasContractType()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasContractState()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasUniqueAddress()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasExchengeToken()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -565,6 +901,24 @@ public final class UnconfirmedTranMessage {
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         output.writeBytes(9, transSignature_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 10, contractBin_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 11, contractAddress_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        output.writeInt32(12, contractType_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        output.writeInt32(13, contractState_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 14, uniqueAddress_);
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 15, exchengeToken_);
       }
       unknownFields.writeTo(output);
     }
@@ -605,6 +959,26 @@ public final class UnconfirmedTranMessage {
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(9, transSignature_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, contractBin_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, contractAddress_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(12, contractType_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(13, contractState_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(14, uniqueAddress_);
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(15, exchengeToken_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -667,6 +1041,36 @@ public final class UnconfirmedTranMessage {
         result = result && getTransSignature()
             .equals(other.getTransSignature());
       }
+      result = result && (hasContractBin() == other.hasContractBin());
+      if (hasContractBin()) {
+        result = result && getContractBin()
+            .equals(other.getContractBin());
+      }
+      result = result && (hasContractAddress() == other.hasContractAddress());
+      if (hasContractAddress()) {
+        result = result && getContractAddress()
+            .equals(other.getContractAddress());
+      }
+      result = result && (hasContractType() == other.hasContractType());
+      if (hasContractType()) {
+        result = result && (getContractType()
+            == other.getContractType());
+      }
+      result = result && (hasContractState() == other.hasContractState());
+      if (hasContractState()) {
+        result = result && (getContractState()
+            == other.getContractState());
+      }
+      result = result && (hasUniqueAddress() == other.hasUniqueAddress());
+      if (hasUniqueAddress()) {
+        result = result && getUniqueAddress()
+            .equals(other.getUniqueAddress());
+      }
+      result = result && (hasExchengeToken() == other.hasExchengeToken());
+      if (hasExchengeToken()) {
+        result = result && getExchengeToken()
+            .equals(other.getExchengeToken());
+      }
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -716,6 +1120,30 @@ public final class UnconfirmedTranMessage {
       if (hasTransSignature()) {
         hash = (37 * hash) + TRANSSIGNATURE_FIELD_NUMBER;
         hash = (53 * hash) + getTransSignature().hashCode();
+      }
+      if (hasContractBin()) {
+        hash = (37 * hash) + CONTRACTBIN_FIELD_NUMBER;
+        hash = (53 * hash) + getContractBin().hashCode();
+      }
+      if (hasContractAddress()) {
+        hash = (37 * hash) + CONTRACTADDRESS_FIELD_NUMBER;
+        hash = (53 * hash) + getContractAddress().hashCode();
+      }
+      if (hasContractType()) {
+        hash = (37 * hash) + CONTRACTTYPE_FIELD_NUMBER;
+        hash = (53 * hash) + getContractType();
+      }
+      if (hasContractState()) {
+        hash = (37 * hash) + CONTRACTSTATE_FIELD_NUMBER;
+        hash = (53 * hash) + getContractState();
+      }
+      if (hasUniqueAddress()) {
+        hash = (37 * hash) + UNIQUEADDRESS_FIELD_NUMBER;
+        hash = (53 * hash) + getUniqueAddress().hashCode();
+      }
+      if (hasExchengeToken()) {
+        hash = (37 * hash) + EXCHENGETOKEN_FIELD_NUMBER;
+        hash = (53 * hash) + getExchengeToken().hashCode();
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -864,6 +1292,18 @@ public final class UnconfirmedTranMessage {
         bitField0_ = (bitField0_ & ~0x00000080);
         transSignature_ = com.google.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000100);
+        contractBin_ = "";
+        bitField0_ = (bitField0_ & ~0x00000200);
+        contractAddress_ = "";
+        bitField0_ = (bitField0_ & ~0x00000400);
+        contractType_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000800);
+        contractState_ = 0;
+        bitField0_ = (bitField0_ & ~0x00001000);
+        uniqueAddress_ = "";
+        bitField0_ = (bitField0_ & ~0x00002000);
+        exchengeToken_ = "";
+        bitField0_ = (bitField0_ & ~0x00004000);
         return this;
       }
 
@@ -924,6 +1364,30 @@ public final class UnconfirmedTranMessage {
           to_bitField0_ |= 0x00000100;
         }
         result.transSignature_ = transSignature_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        result.contractBin_ = contractBin_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        result.contractAddress_ = contractAddress_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000800;
+        }
+        result.contractType_ = contractType_;
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00001000;
+        }
+        result.contractState_ = contractState_;
+        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
+          to_bitField0_ |= 0x00002000;
+        }
+        result.uniqueAddress_ = uniqueAddress_;
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
+          to_bitField0_ |= 0x00004000;
+        }
+        result.exchengeToken_ = exchengeToken_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1001,6 +1465,32 @@ public final class UnconfirmedTranMessage {
         if (other.hasTransSignature()) {
           setTransSignature(other.getTransSignature());
         }
+        if (other.hasContractBin()) {
+          bitField0_ |= 0x00000200;
+          contractBin_ = other.contractBin_;
+          onChanged();
+        }
+        if (other.hasContractAddress()) {
+          bitField0_ |= 0x00000400;
+          contractAddress_ = other.contractAddress_;
+          onChanged();
+        }
+        if (other.hasContractType()) {
+          setContractType(other.getContractType());
+        }
+        if (other.hasContractState()) {
+          setContractState(other.getContractState());
+        }
+        if (other.hasUniqueAddress()) {
+          bitField0_ |= 0x00002000;
+          uniqueAddress_ = other.uniqueAddress_;
+          onChanged();
+        }
+        if (other.hasExchengeToken()) {
+          bitField0_ |= 0x00004000;
+          exchengeToken_ = other.exchengeToken_;
+          onChanged();
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -1032,6 +1522,24 @@ public final class UnconfirmedTranMessage {
           return false;
         }
         if (!hasTransSignature()) {
+          return false;
+        }
+        if (!hasContractBin()) {
+          return false;
+        }
+        if (!hasContractAddress()) {
+          return false;
+        }
+        if (!hasContractType()) {
+          return false;
+        }
+        if (!hasContractState()) {
+          return false;
+        }
+        if (!hasUniqueAddress()) {
+          return false;
+        }
+        if (!hasExchengeToken()) {
           return false;
         }
         return true;
@@ -1522,6 +2030,374 @@ public final class UnconfirmedTranMessage {
         onChanged();
         return this;
       }
+
+      private java.lang.Object contractBin_ = "";
+      /**
+       * <code>required string contractBin = 10;</code>
+       */
+      public boolean hasContractBin() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>required string contractBin = 10;</code>
+       */
+      public java.lang.String getContractBin() {
+        java.lang.Object ref = contractBin_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            contractBin_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string contractBin = 10;</code>
+       */
+      public com.google.protobuf.ByteString
+          getContractBinBytes() {
+        java.lang.Object ref = contractBin_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          contractBin_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string contractBin = 10;</code>
+       */
+      public Builder setContractBin(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        contractBin_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string contractBin = 10;</code>
+       */
+      public Builder clearContractBin() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        contractBin_ = getDefaultInstance().getContractBin();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string contractBin = 10;</code>
+       */
+      public Builder setContractBinBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        contractBin_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object contractAddress_ = "";
+      /**
+       * <code>required string contractAddress = 11;</code>
+       */
+      public boolean hasContractAddress() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>required string contractAddress = 11;</code>
+       */
+      public java.lang.String getContractAddress() {
+        java.lang.Object ref = contractAddress_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            contractAddress_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string contractAddress = 11;</code>
+       */
+      public com.google.protobuf.ByteString
+          getContractAddressBytes() {
+        java.lang.Object ref = contractAddress_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          contractAddress_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string contractAddress = 11;</code>
+       */
+      public Builder setContractAddress(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000400;
+        contractAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string contractAddress = 11;</code>
+       */
+      public Builder clearContractAddress() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        contractAddress_ = getDefaultInstance().getContractAddress();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string contractAddress = 11;</code>
+       */
+      public Builder setContractAddressBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000400;
+        contractAddress_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int contractType_ ;
+      /**
+       * <code>required int32 contractType = 12;</code>
+       */
+      public boolean hasContractType() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>required int32 contractType = 12;</code>
+       */
+      public int getContractType() {
+        return contractType_;
+      }
+      /**
+       * <code>required int32 contractType = 12;</code>
+       */
+      public Builder setContractType(int value) {
+        bitField0_ |= 0x00000800;
+        contractType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 contractType = 12;</code>
+       */
+      public Builder clearContractType() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        contractType_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int contractState_ ;
+      /**
+       * <code>required int32 contractState = 13;</code>
+       */
+      public boolean hasContractState() {
+        return ((bitField0_ & 0x00001000) == 0x00001000);
+      }
+      /**
+       * <code>required int32 contractState = 13;</code>
+       */
+      public int getContractState() {
+        return contractState_;
+      }
+      /**
+       * <code>required int32 contractState = 13;</code>
+       */
+      public Builder setContractState(int value) {
+        bitField0_ |= 0x00001000;
+        contractState_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 contractState = 13;</code>
+       */
+      public Builder clearContractState() {
+        bitField0_ = (bitField0_ & ~0x00001000);
+        contractState_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object uniqueAddress_ = "";
+      /**
+       * <code>required string uniqueAddress = 14;</code>
+       */
+      public boolean hasUniqueAddress() {
+        return ((bitField0_ & 0x00002000) == 0x00002000);
+      }
+      /**
+       * <code>required string uniqueAddress = 14;</code>
+       */
+      public java.lang.String getUniqueAddress() {
+        java.lang.Object ref = uniqueAddress_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            uniqueAddress_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string uniqueAddress = 14;</code>
+       */
+      public com.google.protobuf.ByteString
+          getUniqueAddressBytes() {
+        java.lang.Object ref = uniqueAddress_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          uniqueAddress_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string uniqueAddress = 14;</code>
+       */
+      public Builder setUniqueAddress(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00002000;
+        uniqueAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string uniqueAddress = 14;</code>
+       */
+      public Builder clearUniqueAddress() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        uniqueAddress_ = getDefaultInstance().getUniqueAddress();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string uniqueAddress = 14;</code>
+       */
+      public Builder setUniqueAddressBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00002000;
+        uniqueAddress_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object exchengeToken_ = "";
+      /**
+       * <code>required string exchengeToken = 15;</code>
+       */
+      public boolean hasExchengeToken() {
+        return ((bitField0_ & 0x00004000) == 0x00004000);
+      }
+      /**
+       * <code>required string exchengeToken = 15;</code>
+       */
+      public java.lang.String getExchengeToken() {
+        java.lang.Object ref = exchengeToken_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            exchengeToken_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string exchengeToken = 15;</code>
+       */
+      public com.google.protobuf.ByteString
+          getExchengeTokenBytes() {
+        java.lang.Object ref = exchengeToken_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          exchengeToken_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string exchengeToken = 15;</code>
+       */
+      public Builder setExchengeToken(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00004000;
+        exchengeToken_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string exchengeToken = 15;</code>
+       */
+      public Builder clearExchengeToken() {
+        bitField0_ = (bitField0_ & ~0x00004000);
+        exchengeToken_ = getDefaultInstance().getExchengeToken();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string exchengeToken = 15;</code>
+       */
+      public Builder setExchengeTokenBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00004000;
+        exchengeToken_ = value;
+        onChanged();
+        return this;
+      }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
@@ -1585,13 +2461,17 @@ public final class UnconfirmedTranMessage {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\034UnconfirmedTranMessage.proto\"\267\001\n\017Uncon" +
+      "\n\034UnconfirmedTranMessage.proto\"\300\002\n\017Uncon" +
       "firmedTran\022\021\n\ttransFrom\030\001 \002(\t\022\017\n\007transTo" +
       "\030\002 \002(\t\022\016\n\006remark\030\003 \002(\t\022\021\n\ttokenName\030\004 \002(" +
       "\t\022\022\n\ntransValue\030\005 \002(\003\022\013\n\003fee\030\006 \002(\003\022\021\n\tti" +
       "meStamp\030\007 \002(\003\022\021\n\ttransType\030\010 \002(\005\022\026\n\016tran" +
-      "sSignature\030\t \002(\014B>\n$com.photon.photoncha" +
-      "in.network.protoB\026UnconfirmedTranMessage"
+      "sSignature\030\t \002(\014\022\023\n\013contractBin\030\n \002(\t\022\027\n" +
+      "\017contractAddress\030\013 \002(\t\022\024\n\014contractType\030\014" +
+      " \002(\005\022\025\n\rcontractState\030\r \002(\005\022\025\n\runiqueAdd" +
+      "ress\030\016 \002(\t\022\025\n\rexchengeToken\030\017 \002(\tB>\n$com" +
+      ".photon.photonchain.network.protoB\026Uncon" +
+      "firmedTranMessage"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1610,7 +2490,7 @@ public final class UnconfirmedTranMessage {
     internal_static_UnconfirmedTran_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_UnconfirmedTran_descriptor,
-        new java.lang.String[] { "TransFrom", "TransTo", "Remark", "TokenName", "TransValue", "Fee", "TimeStamp", "TransType", "TransSignature", });
+        new java.lang.String[] { "TransFrom", "TransTo", "Remark", "TokenName", "TransValue", "Fee", "TimeStamp", "TransType", "TransSignature", "ContractBin", "ContractAddress", "ContractType", "ContractState", "UniqueAddress", "ExchengeToken", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

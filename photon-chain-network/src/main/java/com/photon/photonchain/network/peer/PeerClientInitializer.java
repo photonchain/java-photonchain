@@ -9,18 +9,23 @@ import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+
 /**
- * @Author wu
- * Created by SKINK on 2017/12/25.
+ * @Author PTN
+ * Created by PTN on 2017/12/25.
  */
 @Component
 public class PeerClientInitializer extends ChannelInitializer<NioSocketChannel> {
 
     @Autowired
     private PeerClientHandler peerClientHandler;
+
+    Logger logger = LoggerFactory.getLogger(PeerClientInitializer.class);
 
     @Override
     protected void initChannel(NioSocketChannel ch) throws Exception {

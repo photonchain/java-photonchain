@@ -1,0 +1,31 @@
+syntax = "proto2";
+import "BlockMessage.proto";
+import "TransactionMessage.proto";
+import "MessageTypeEnum.proto";
+import "EventTypeEnum.proto";
+import "TokenMessage.proto";
+import "UnconfirmedTranMessage.proto";
+import "ParticipantMessage.proto";
+option java_package = "com.photon.photonchain.network.proto";
+option java_outer_classname = "InesvMessage";
+
+message Message {
+    required MessageType messageType = 1;
+    required EventType eventType = 2;
+    optional int64 blockHeight = 3;
+    optional Block block = 4;
+    optional Transaction transaction = 5;
+    repeated Block blockList = 6;
+    repeated Transaction transactionList = 7;
+    optional int64 transactionId = 8;
+    repeated string nodeAddressList = 9;
+    optional Token token = 10;
+    repeated Token tokenList = 11;
+    optional UnconfirmedTran unconfirmedTran = 12;
+    repeated UnconfirmedTran unconfirmedTranList = 13;
+    optional string mac = 14;
+    optional bool state = 15;
+    optional string participant = 16;
+    repeated Participant participantList = 17;
+    optional string contractAddresss = 18;
+}

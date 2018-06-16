@@ -1,7 +1,10 @@
 package com.photon.photonchain.network.ehcacheManager;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import net.sf.ehcache.Cache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,6 +19,8 @@ import java.util.List;
 @Component
 public class NioSocketChannelManager {
 
+    private static Logger logger = LoggerFactory.getLogger(NioSocketChannelManager.class);
+
     private Cache nioSocketChannelCache = EhCacheManager.getCache("nioSocketChannelCache");
 
     public void addNioSocketChannel(String mac, ChannelHandlerContext ctx) {
@@ -24,6 +29,13 @@ public class NioSocketChannelManager {
         } else {
             EhCacheManager.remove(nioSocketChannelCache, mac.toString());
             EhCacheManager.put(nioSocketChannelCache, mac, ctx);
+        }
+    }
+
+    public void closeNioSocketChannelByMac(String mac) {
+        if (EhCacheManager.existKey(nioSocketChannelCache, mac)) {
+            ChannelHandlerContext channelHandlerContext = EhCacheManager.getCacheValue(nioSocketChannelCache, mac, ChannelHandlerContext.class);
+            channelHandlerContext.channel().closeFuture();
         }
     }
 
@@ -44,16 +56,20 @@ public class NioSocketChannelManager {
 
     public void removeInvalidChannel() {
         nioSocketChannelCache.getKeys().forEach(mac -> {
-            boolean isActive = ((ChannelHandlerContext) nioSocketChannelCache.get(mac).getObjectValue()).channel().isActive();
+            Channel ctx = ((ChannelHandlerContext) nioSocketChannelCache.get(mac).getObjectValue()).channel();
+            boolean isActive = ctx.isActive();
             if (!isActive) {
                 EhCacheManager.remove(nioSocketChannelCache, mac.toString());
             }
         });
     }
 
-
+    /**
+     * 移除指定的mac地址
+     */
     public void removeTheMac(String mac) {
         EhCacheManager.remove(nioSocketChannelCache, mac);
+        this.closeNioSocketChannelByMac(mac);
     }
 
     public void write(Object o) {

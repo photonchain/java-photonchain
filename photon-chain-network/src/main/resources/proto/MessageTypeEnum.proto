@@ -1,0 +1,8 @@
+syntax = "proto2";
+option java_package = "com.photon.photonchain.network.proto";
+option java_outer_classname = "MessageTypeEnum";
+
+enum MessageType {
+    REQUEST = 0;
+    RESPONSE = 1;
+}

@@ -8,7 +8,7 @@ package com.photon.photonchain.network.utils;
  */
 public class TokenUtil {
     public static double TokensRate(String tokenName) {
-        double rate = 0.000000001;
+        double rate = 1000;
         return rate / tokenName.length();
     }
 }

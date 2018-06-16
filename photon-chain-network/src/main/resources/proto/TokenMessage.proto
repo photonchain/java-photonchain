@@ -1,0 +1,10 @@
+syntax = "proto2";
+option java_package = "com.photon.photonchain.network.proto";
+option java_outer_classname = "TokenMessage";
+
+message Token {
+    required string name = 1;
+    required string symbol = 2;
+    required string icon = 3;
+    required int32 decimals = 4;
+}

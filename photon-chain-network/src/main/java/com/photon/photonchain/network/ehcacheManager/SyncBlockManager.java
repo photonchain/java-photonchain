@@ -5,6 +5,8 @@ import com.photon.photonchain.network.proto.MessageManager;
 import com.photon.photonchain.storage.constants.Constants;
 import com.photon.photonchain.storage.entity.Block;
 import net.sf.ehcache.Cache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spongycastle.util.encoders.Hex;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,8 @@ import java.util.*;
  */
 @Component
 public class SyncBlockManager {
+    final static Logger logger = LoggerFactory.getLogger(SyncBlockManager.class);
+
     private Cache syncBlockCache = EhCacheManager.getCache("syncBlockCache");
 
     private static final String SYNC_BLOCK = "SYNC_BLOCK";
@@ -31,6 +35,7 @@ public class SyncBlockManager {
 
 
     public void setSyncBlock(boolean syncBlock) {
+        logger.info("【syncBlock："+syncBlock+"】");
         EhCacheManager.put(syncBlockCache, SYNC_BLOCK, syncBlock);
     }
 
@@ -55,6 +60,8 @@ public class SyncBlockManager {
     }
 
     public synchronized Queue<Map> addSyncBlockQueue(List<BlockMessage.Block> blockList, long blockHeight,String mac) {
+        logger.info("================ "+blockList.size());
+        logger.info("---------------"+mac+"-----"+blockHeight);
         List<String> baseHashMarketRoot = EhCacheManager.getCacheValue(syncBlockCache, BASE_HASH_MARKLE_ROOT, List.class);
         List<Block> syncBlockList = new ArrayList<>();
         List<String> syncHashMerkleRoot = new ArrayList<>();
