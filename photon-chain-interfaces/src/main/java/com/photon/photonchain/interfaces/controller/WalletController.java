@@ -276,8 +276,8 @@ public class WalletController {
     public Res getBlockInfo() {
         Res r = new Res();
         Map<String, Object> resultMap = new HashMap<>();
-        Double avgAmount = blockRepository.getAmountAvg();
-        Double avgFee = blockRepository.getFeeAvg();
+        Double avgAmount = blockRepository.getAmountAvg().doubleValue();
+        Double avgFee = blockRepository.getFeeAvg().doubleValue();
         Transaction lastTransaction = initializationManager.getLastTransaction();
         TransactionHead lastTransactionHead = lastTransaction.getTransactionHead();
         long trans_timeDiff_h = (lastTransactionHead.getTimeStamp() - GenesisBlock.GENESIS_TIME) / 3600000;  //h
@@ -567,6 +567,88 @@ public class WalletController {
         return res;
     }
 
+    /**
+     * broadcast transaction
+     *
+     * @param pubkeyFrom    ： from
+     * @param pubkeyTo      ： to
+     * @param remark        ： remark
+     * @param tokenName     ： token
+     * @param transValue    ： amount
+     * @param fee           ： poundage(egg)
+     * @param timeStamp     ： time
+     * @param r             ： signautre
+     * @param s             ： signautre
+     * @param v             ： signautre
+     * @return
+     */
+    @PostMapping("broadcast")
+    @ResponseBody
+    public Res broadcast(
+            String pubkeyFrom,
+            String pubkeyTo,
+            String remark,
+            String tokenName,
+            long transValue,
+            long fee,
+            long timeStamp,
+            String r,
+            String s,
+            byte v) {
+        Res res = new Res();
+        UnconfirmedTran unconfirmedTran = new UnconfirmedTran(pubkeyFrom, pubkeyTo, remark, tokenName, transValue, fee, timeStamp, 0);
+        byte[] data = SHAEncrypt.sha3(SerializationUtils.serialize(unconfirmedTran.toString()));
+        ECKey.ECDSASignature sig = ECKey.ECDSASignature.fromComponents(Hex.decode(r), Hex.decode(s), v);
+        if (!ECKey.verify(data, sig, Hex.decode(pubkeyFrom))) {
+            res.code = Res.CODE_201;
+            //res.code = Res.CODE_203;
+            res.msg = "";
+            res.data = "";
+            return res;
+        }
+
+        byte[] transSignature = JSON.toJSONString(sig).getBytes();
+        unconfirmedTran.setTransSignature(transSignature);
+        InesvMessage.Message.Builder builder = MessageManager.createMessageBuilder(RESPONSE, NEW_TRANSACTION);
+        builder.setUnconfirmedTran(MessageManager.createUnconfirmedTranMessage(unconfirmedTran));
+        List<String> hostList = nioSocketChannelManager.getChannelHostList();
+        builder.addAllNodeAddressList(hostList);
+        nioSocketChannelManager.write(builder.build());
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("transHash", Hex.toHexString(transSignature));
+        res.code = Res.CODE_200;
+        res.msg = "";
+        res.data = resultMap;
+        return res;
+    }
+
+    /**
+     * get publickey
+     *
+     * @param address
+     * @param tokenName
+     * @return
+     */
+    @PostMapping("getPubKey")
+    @ResponseBody
+    public Res getPubKey(String address, String tokenName) {
+        Res res = new Res();
+        Assets assets = assetsRepository.findByAddressAndTokenName(address, tokenName);
+        if (assets == null) {
+            res.code = Res.CODE_201;
+            res.msg = "";
+            res.data = "";
+            return res;
+        }
+        String pubkey = assets.getPubKey();
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("pubkey", pubkey);
+        res.code = Res.CODE_200;
+        res.msg = "";
+        res.data = resultMap;
+        return res;
+    }
 
     /**
      * get transactions
